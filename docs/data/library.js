@@ -93,19 +93,5 @@ window.XINHUO_LIBRARY = {
       "mark": "微"
     }
   ],
-  "resources": [
-    {
-      "id": "note-de2b09eeed08e93550fafbc0",
-      "title": "半导体技术基础笔记zzy",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "其他复习资料",
-      "featured": false,
-      "credit": "",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-18",
-      "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记zzy.pdf"
-    }
-  ]
+  "resources": []
 };
