@@ -10,11 +10,14 @@
 <body>
 <header class="top"><div class="wrap top-row">
   <a class="brand" href="/"><img class="college-logo" src="../assets/college-logo.jpg" alt="学院院徽" width="42" height="42"><span>芯火相传<small>资料管理端</small></span></a>
-  <a href="/" target="_blank" rel="noopener">打开学生端 ↗</a>
+  <nav class="admin-nav" aria-label="站点入口">
+    <a id="public-site" href="https://jcdl-notes.github.io/" target="_blank" rel="noopener">打开正式学生端 ↗</a>
+    <a href="/" target="_blank" rel="noopener">本地预览 ↗</a>
+  </nav>
 </div></header>
 <main class="wrap editor">
   <h1>上传复习资料</h1>
-  <p id="sync-status" aria-live="polite"></p>
+  <div class="publish-panel"><p id="sync-status" aria-live="polite"></p><a id="deployments" href="https://github.com/jcdl-notes/jcdl-notes.github.io/actions" target="_blank" rel="noopener">查看发布进度 ↗</a><button id="retry" class="action" type="button" hidden>重试发布</button></div>
   <p id="edit-status" role="status"></p>
   <form id="upload" class="editor-box">
     <div class="editor-fields">
@@ -24,14 +27,14 @@
       <label class="checkbox"><input type="checkbox" name="featured">标记为优秀资料</label>
     </div>
     <p>可一次上传同一门课的多份 PDF。默认用文件名作为标题。</p>
-    <details>
-      <summary>填写署名和知识点（可选）</summary>
+    <div class="upload-details">
+      <p class="section-kicker">资料信息（可选）</p>
       <div class="editor-fields">
         <label>公开署名<input name="credit" maxlength="60"></label>
         <label>知识点<input name="topics" maxlength="240" placeholder="如：相量、正弦稳态"></label>
         <label>资料类别<select name="kind"><option>其他复习资料</option><option>完整笔记</option><option>专题笔记</option><option>习题整理</option></select></label>
       </div>
-    </details>
+    </div>
     <p><button class="action" type="submit">上传并更新目录</button></p>
   </form>
   <section class="editor-box">
@@ -43,8 +46,32 @@
       <div><button class="action" type="submit">添加</button></div>
     </form>
   </section>
-  <section class="editor-box"><h2>已收录资料</h2><ul id="entries"></ul></section>
-  <button id="retry" class="action" type="button" hidden>重试同步到 GitHub</button>
+  <section class="editor-box">
+    <div class="admin-list-head"><h2>已收录资料</h2><span id="entry-count"></span></div>
+    <div class="admin-filters">
+      <label>搜索<input id="note-search" type="search" placeholder="标题、署名、课程或知识点"></label>
+      <label>届次<select id="note-edition"></select></label>
+      <label>课程<select id="note-course"></select></label>
+      <label class="checkbox"><input id="note-featured" type="checkbox">只看优秀</label>
+    </div>
+    <ul id="entries" class="entry-list"></ul>
+  </section>
+  <dialog id="edit-note" aria-labelledby="note-title"><div class="dialog-inner">
+    <form method="dialog"><button type="submit" class="close" aria-label="关闭编辑">×</button></form>
+    <h2 id="note-title">编辑资料</h2>
+    <form id="edit-form" class="editor-fields">
+      <label class="wide">资料标题<input name="title" maxlength="120" required></label>
+      <label>届次<select name="edition" required></select></label>
+      <label>课程<select name="course" required></select></label>
+      <label>公开署名<input name="credit" maxlength="60"></label>
+      <label>知识点<input name="topics" maxlength="240" placeholder="如：相量、正弦稳态"></label>
+      <label>资料类别<select name="kind"></select></label>
+      <label class="checkbox"><input type="checkbox" name="featured">标记为优秀资料</label>
+      <label class="wide">替换 PDF（可选）<input name="pdf" type="file" accept=".pdf,application/pdf"></label>
+      <p class="wide" id="edit-note-status" role="status"></p>
+      <div class="wide"><button type="submit" class="action">保存修改</button></div>
+    </form>
+  </div></dialog>
 </main>
 </body>
 </html>

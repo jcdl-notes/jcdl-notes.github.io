@@ -1,11 +1,11 @@
 :root {
   color-scheme: light;
-  --paper: #f7f8f3;
-  --ink: #18342a;
-  --muted: #56685e;
-  --line: #dbe3d9;
-  --green: #24654a;
-  --pale: #edf3ea;
+  --paper: #f4f7fc;
+  --ink: #1b2c4c;
+  --muted: #52647e;
+  --line: #d6e1ef;
+  --blue: #315d9c;
+  --pale: #edf3fb;
   --white: #fff;
   font-family: "Microsoft YaHei","PingFang SC",system-ui,sans-serif;
   font-synthesis: none
@@ -40,7 +40,7 @@ a {
 }
 
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
-  outline: 3px solid #528c55;
+  outline: 3px solid #477bc5;
   outline-offset: 3px
 }
 
@@ -65,7 +65,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 .top {
   border-bottom:1px solid var(--line);
-  background: #fcfdf9
+  background: #fbfdff
 }
 
 .top-row {
@@ -102,8 +102,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   display: grid;
   place-items: center;
   border-radius: 10px;
-  background: #234d3e;
-  color: #d9f2b0;
+  background: #274a7d;
+  color: #dbe9ff;
   font-size: 20px;
   letter-spacing: 0
 }
@@ -118,7 +118,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .nav-current {
   text-decoration: none;
   font-weight: 750;
-  color:var(--green)
+  color:var(--blue)
 }
 
 .plain {
@@ -135,8 +135,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   isolation: isolate;
   overflow: hidden;
   border-radius: 18px;
-  background:linear-gradient(115deg,#17372f 30%,#214e40 100%);
-  color: #fafcf2;
+  background:linear-gradient(115deg,#172a4a 30%,#335a91 100%);
+  color: #f6f9ff;
   display: flex;
   align-items: center
 }
@@ -148,7 +148,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 .eyebrow {
-  color: #d3e3d6;
+  color: #d4e1f6;
   font-size: 13px;
   letter-spacing: .16em;
   margin: 0 0 17px
@@ -158,7 +158,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   display: inline-block;
   width: 7px;
   height: 7px;
-  background: #c9eb86;
+  background: #a9ccff;
   border-radius: 50%;
   margin-right: 8px;
   vertical-align: 2px
@@ -173,11 +173,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 .hero h1 span {
-  color: #c9eb86
+  color: #a9ccff
 }
 
 .hero-copy {
-  color: #d5e4d9;
+  color: #e2ebfa;
   font-size: 15px;
   margin: 18px 0 22px
 }
@@ -187,8 +187,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   align-items: center;
   gap: 26px;
   padding: 9px 15px;
-  background: #d7efa9;
-  color: #18342a;
+  background: #c9defd;
+  color: #1b2c4c;
   border-radius: 7px;
   font-size: 14px;
   font-weight: 750;
@@ -196,14 +196,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 .hero-link:hover {
-  background: #e8f8c2
+  background: #e0ecfd
 }
 
 .hero-index {
   position: absolute;
   right: 26px;
   bottom: 19px;
-  color: #c7dbca;
+  color: #cadcf7;
   font: 11px/1.5 ui-monospace,monospace;
   letter-spacing: .14em
 }
@@ -213,7 +213,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   inset: 0 0 0 auto;
   width: 56%;
   opacity: .9;
-  background-image:radial-gradient(#b4d4b23a 1px,transparent 1px);
+  background-image:radial-gradient(#b4d2ff3a 1px,transparent 1px);
   background-size: 21px 21px;
   mask-image:linear-gradient(to right,transparent,#000 23%)
 }
@@ -225,14 +225,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   width: 166px;
   height: 166px;
   transform:translate(-50%,-50%) rotate(-9deg);
-  border: 1px solid #b7d498;
-  background: #204938;
+  border: 1px solid #adc8ef;
+  background: #315484;
   border-radius: 24px;
-  box-shadow: 0 0 0 9px #bcdfa018,0 0 0 21px #bcdfa00d;
+  box-shadow: 0 0 0 9px #b1cdfb20,0 0 0 21px #b1cdfb0f;
   display: grid;
   place-items: center;
   align-content: center;
-  color: #d3eca1
+  color: #b7d3fc
 }
 
 .chip span {
@@ -254,12 +254,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #d3eca1
+  background: #b7d3fc
 }
 
 .trace {
   position: absolute;
-  border: 1px solid #b7d49869;
+  border: 1px solid #adc8ef69;
   border-radius: 24px;
   width: 39%;
   height: 22%;
@@ -298,9 +298,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   position: absolute;
   width: 9px;
   height: 9px;
-  border: 1px solid #d3eca1;
+  border: 1px solid #b7d3fc;
   border-radius: 50%;
-  background: #274e3e
+  background: #314c7c
 }
 
 .node-one {
@@ -333,7 +333,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 .section-kicker {
   margin: 0 0 3px;
-  color:var(--green);
+  color:var(--blue);
   font-size: 13px;
   font-weight: 750;
   letter-spacing: .12em
@@ -374,7 +374,7 @@ h2 {
 }
 
 .search:focus-within {
-  outline: 2px solid #60916a
+  outline: 2px solid #6893cf
 }
 
 .search input {
@@ -388,7 +388,7 @@ h2 {
 .lens {
   flex: 0 0 13px;
   height: 13px;
-  border: 1.5px solid #526b5c;
+  border: 1.5px solid #536d91;
   border-radius: 50%;
   position: relative;
   margin-right: 3px
@@ -399,7 +399,7 @@ h2 {
   position: absolute;
   width: 6px;
   height: 1.5px;
-  background: #526b5c;
+  background: #536d91;
   right: -5px;
   bottom: -2px;
   transform:rotate(45deg)
@@ -421,8 +421,8 @@ h2 {
 }
 
 .filter-feature[aria-pressed=true] {
-  background: #dceecf;
-  border-color: #97b785
+  background: #dae9fc;
+  border-color: #8db0df
 }
 
 .filter-feature span {
@@ -453,7 +453,7 @@ h2 {
 }
 
 .tabs button[aria-pressed=true] {
-  background: #234d3e;
+  background: #274a7d;
   color: #fff
 }
 
@@ -482,8 +482,8 @@ h2 {
 }
 
 .course:hover {
-  background: #fbfff7;
-  border-color: #93b594
+  background: #f7fbff;
+  border-color: #93add2
 }
 
 .card-top,.card-foot {
@@ -499,15 +499,15 @@ h2 {
   width: 34px;
   height: 34px;
   border-radius: 7px;
-  background: #ebf2e5;
-  color: #38684d;
+  background: #e6eef9;
+  color: #315d9c;
   font-weight: 750;
   font-size: 16px
 }
 
 .term-tag {
   background:var(--pale);
-  color:var(--green);
+  color:var(--blue);
   font-size: 11px;
   padding: 3px 7px;
   border-radius: 4px;
@@ -522,7 +522,7 @@ h2 {
 }
 
 .card-foot {
-  border-top: 1px solid #e5ebe4;
+  border-top: 1px solid #e1e9f4;
   padding-top: 9px;
   margin-top: auto;
   color:var(--muted);
@@ -530,7 +530,7 @@ h2 {
 }
 
 .arrow {
-  color:var(--green);
+  color:var(--blue);
   font-size: 17px;
   line-height: 1
 }
@@ -538,7 +538,7 @@ h2 {
 .empty {
   grid-column: 1/-1;
   padding: 24px;
-  border: 1px dashed #bacaBD;
+  border: 1px dashed #b6c9e4;
   border-radius: 10px;
   background:var(--pale);
   color:var(--muted)
@@ -562,13 +562,13 @@ dialog {
   max-height: 85vh;
   border:1px solid var(--line);
   border-radius: 14px;
-  background: #fcfdf9;
+  background: #fbfdff;
   color:var(--ink);
   padding: 0
 }
 
 dialog::backdrop {
-  background: #142b24a8
+  background: #172745aa
 }
 
 .dialog-inner {
@@ -626,9 +626,9 @@ dialog::backdrop {
 
 .action {
   display: inline-block;
-  border: 1px solid #abc2ab;
-  background: #ebf3e9;
-  color: #234d3e;
+  border: 1px solid #acc4e5;
+  background: #e9f1fd;
+  color: #274a7d;
   border-radius: 6px;
   padding: 5px 10px;
   text-decoration: none;
@@ -688,7 +688,7 @@ dialog::backdrop {
 .editor input:not([type=checkbox]),.editor select,.editor textarea {
   width: 100%;
   padding: 7px;
-  border: 1px solid #a9b9ad;
+  border: 1px solid #acbed7;
   border-radius: 6px;
   background: #fff
 }
@@ -708,7 +708,7 @@ dialog::backdrop {
 }
 
 .editor #edit-status {
-  color:var(--green);
+  color:var(--blue);
   font-weight: 700
 }
 
@@ -718,7 +718,7 @@ dialog::backdrop {
 
 .editor details summary {
   cursor: pointer;
-  color:var(--green)
+  color:var(--blue)
 }
 
 @media(max-width:900px) {
@@ -865,5 +865,104 @@ dialog::backdrop {
 .editor .action:disabled {
   opacity: .58;
   cursor: wait;
+}
+
+.admin-nav {
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: end;
+}
+.admin-nav a, .publish-panel a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.admin-nav a:hover, .publish-panel a:hover {
+  text-decoration: underline;
+}
+.publish-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--pale);
+  font-size: 14px;
+}
+.publish-panel p {
+  margin: 0;
+}
+.upload-details {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.upload-details .section-kicker {
+  margin-bottom: 10px;
+}
+.admin-list-head, .entry {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+#entry-count, .entry-info small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.admin-filters {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr auto;
+  align-items: end;
+  gap: 10px;
+  margin-top: 14px;
+}
+.admin-filters label {
+  min-width: 0;
+  font-size: 13px;
+}
+.admin-filters .checkbox {
+  min-height: 40px;
+  white-space: nowrap;
+}
+.entry-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+.entry {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.entry-info {
+  overflow-wrap: anywhere;
+}
+.entry-info small {
+  display: block;
+  margin-top: 4px;
+}
+.entry-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.action.danger {
+  border-color: #eac4c8;
+  background: #fff4f5;
+  color: #9b2031;
+}
+#edit-note-status {
+  color: var(--muted);
+  margin: 0;
+}
+@media(max-width: 620px) {
+  .admin-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .admin-filters label:first-child {
+    grid-column: 1 / -1;
+  }
 }
 

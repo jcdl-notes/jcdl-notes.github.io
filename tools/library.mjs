@@ -1,4 +1,5 @@
-import { readFile, readdir, writeFile, rename, open, stat } from "node:fs/promises";
+import { readFile, readdir, writeFile, rename, open, stat, mkdir, mkdtemp, copyFile, unlink, rmdir } from "node:fs/promises";
+import { constants } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash, randomUUID } from "node:crypto";
@@ -35,7 +36,60 @@ export function noteDirectory(data, edition, course, bucket) {
   return join(files, edition, course, bucket);
 }
 
-const isoDate = date => new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai" }).format(date);
+export const isoDate = date => new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai" }).format(date);
+
+export function notePath(data, note) {
+  const bucket = note.featured ? "featured" : "general";
+  const name = note.file.split("/").at(-1);
+  if (!catalog.safeFilename(name) || note.file !== ["files",note.edition,note.course,bucket,name].join("/")) {
+    throw new Error("找不到这份资料对应的 PDF。");
+  }
+  return join(noteDirectory(data,note.edition,note.course,bucket),name);
+}
+
+// Keep the old PDF outside the published tree until the new index has been written.
+export async function updateNote(data, old, next, pdf) {
+  const source = notePath(data,old);
+  const target = next ? notePath(data,next) : null;
+  const resources = data.resources.filter(item => item.id !== old.id);
+  if (next) resources.push(next);
+  const updatedData = {...data,resources};
+  if (target === source && !pdf) {
+    await writeLibrary(updatedData);
+    return updatedData;
+  }
+  if (target) await mkdir(noteDirectory(data,next.edition,next.course,next.featured ? "featured" : "general"),{recursive:true});
+  const backupDirectory = await mkdtemp(join(root,".note-change-"));
+  const backup = join(backupDirectory,"original.pdf");
+  let transferred = false;
+  let targetWritten = false;
+  try {
+    await rename(source,backup);
+    transferred = true;
+    if (target) {
+      if (pdf) {
+        const handle = await open(target,"wx");
+        targetWritten = true;
+        try { await handle.writeFile(pdf); } finally { await handle.close(); }
+      } else {
+        await copyFile(backup,target,constants.COPYFILE_EXCL);
+        targetWritten = true;
+      }
+    }
+    await writeLibrary(updatedData);
+  } catch (error) {
+    if (targetWritten) await unlink(target);
+    if (transferred) await rename(backup,source);
+    await rmdir(backupDirectory);
+    if (error.code === "EEXIST") throw new Error("目标位置已有同名 PDF，原资料已保留。");
+    throw error;
+  }
+  try {
+    await unlink(backup);
+    await rmdir(backupDirectory);
+  } catch (error) { console.error("无法清理本地 PDF 备份：",error.code); }
+  return updatedData;
+}
 async function listDirectory(directory) {
   try {
     return await readdir(directory, { withFileTypes: true });
@@ -68,7 +122,7 @@ export async function rebuildIndex(data = null) {
           const old = previous.get(file);
           const day = old?.updated || isoDate((await stat(diskPath)).mtime);
           resources.push({
-            id: "note-" + createHash("sha256").update(file).digest("hex").slice(0, 24),
+            id: old?.id || "note-" + createHash("sha256").update(file).digest("hex").slice(0, 24),
             title: old?.title || item.name.slice(0, -4),
             course: course.id,
             edition: edition.id,
@@ -78,6 +132,7 @@ export async function rebuildIndex(data = null) {
             summary: old?.summary || "",
             topics: old?.topics || [],
             updated: day,
+            ...(old?.revision ? {revision:old.revision} : {}),
             file
           });
         }

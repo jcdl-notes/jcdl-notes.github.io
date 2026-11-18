@@ -1,8 +1,27 @@
 "use strict";
-(() => {
+(async () => {
   const $ = id => document.getElementById(id);
-  const data = window.XINHUO_LIBRARY;
   const catalog = window.XinhuoCatalog;
+  const libraryURL = new URL("data/library.js",location.href);
+  async function loadLibrary() {
+    if (location.protocol !== "file:") {
+      // Share one CDN cache entry per minute so a new deployment is seen promptly.
+      libraryURL.searchParams.set("v",String(Math.floor(Date.now()/60000)));
+      const result = await fetch(libraryURL,{cache:"no-cache"});
+      if (!result.ok) throw new Error("HTTP " + result.status);
+      return catalog.parse(await result.text());
+    }
+    return new Promise((resolve,reject) => {
+      const script = document.createElement("script");
+      script.src = libraryURL;
+      script.onload = () => resolve(window.XINHUO_LIBRARY);
+      script.onerror = reject;
+      document.head.append(script);
+    });
+  }
+  let data;
+  try { data = await loadLibrary(); }
+  catch { $("course-grid").textContent = "暂时无法加载资料，请刷新页面重试。"; return; }
   const errors = catalog.validate(data);
   function make(tag, content, className) {
     const node = document.createElement(tag);
@@ -110,13 +129,14 @@
       const actions = make("div",null,"file-actions");
       if (link) {
         const preview = make("a",link.local ? "查看 PDF ↗" : "打开资料链接 ↗","action");
-        preview.href = link.href;
+        const href = resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
+        preview.href = href;
         preview.target = "_blank";
         preview.rel = "noopener noreferrer";
         actions.append(preview);
         if (link.local) {
           const download = make("a","下载 PDF ↓","action");
-          download.href = link.href;
+          download.href = href;
           download.download = resource.title + ".pdf";
           actions.append(download);
         }
