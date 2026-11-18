@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>芯火相传 · 资料管理端</title>
+  <link rel="stylesheet" href="../assets/site.css">
+  <script defer src="editor.js"></script>
+</head>
+<body>
+<header class="top"><div class="wrap top-row">
+  <a class="brand" href="/"><img class="college-logo" src="../assets/college-logo.jpg" alt="学院院徽" width="42" height="42"><span>芯火相传<small>资料管理端</small></span></a>
+  <a href="/" target="_blank" rel="noopener">打开学生端 ↗</a>
+</div></header>
+<main class="wrap editor">
+  <h1>上传复习资料</h1>
+  <p id="sync-status" aria-live="polite"></p>
+  <p id="edit-status" role="status"></p>
+  <form id="upload" class="editor-box">
+    <div class="editor-fields">
+      <label>届次<select name="edition" required></select></label>
+      <label>课程<select name="course" required></select></label>
+      <label class="wide">选择 PDF<input name="pdf" type="file" accept=".pdf,application/pdf" multiple required></label>
+      <label class="checkbox"><input type="checkbox" name="featured">标记为优秀资料</label>
+    </div>
+    <p>可一次上传同一门课的多份 PDF。默认用文件名作为标题。</p>
+    <details>
+      <summary>填写署名和知识点（可选）</summary>
+      <div class="editor-fields">
+        <label>公开署名<input name="credit" maxlength="60"></label>
+        <label>知识点<input name="topics" maxlength="240" placeholder="如：相量、正弦稳态"></label>
+        <label>资料类别<select name="kind"><option>其他复习资料</option><option>完整笔记</option><option>专题笔记</option><option>习题整理</option></select></label>
+      </div>
+    </details>
+    <p><button class="action" type="submit">上传并更新目录</button></p>
+  </form>
+  <section class="editor-box">
+    <h2>管理届次与课程</h2>
+    <form id="category" class="editor-fields">
+      <label>新增类型<select name="type"><option value="courses">课程</option><option value="editions">届次</option><option value="terms">课程学期</option></select></label>
+      <label id="term-label">所属学期<select name="term"></select></label>
+      <label>名称<input name="label" maxlength="80" required placeholder="例如 模拟电子技术"></label>
+      <div><button class="action" type="submit">添加</button></div>
+    </form>
+  </section>
+  <section class="editor-box"><h2>已收录资料</h2><ul id="entries"></ul></section>
+  <button id="retry" class="action" type="button" hidden>重试同步到 GitHub</button>
+</main>
+</body>
+</html>
