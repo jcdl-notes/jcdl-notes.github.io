@@ -218,43 +218,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   mask-image:linear-gradient(to right,transparent,#000 23%)
 }
 
-.chip {
+.hero-brand {
   position: absolute;
   top: 50%;
-  left: 54%;
-  width: 166px;
-  height: 166px;
-  transform:translate(-50%,-50%) rotate(-9deg);
-  border: 1px solid #adc8ef;
-  background: #315484;
-  border-radius: 24px;
-  box-shadow: 0 0 0 9px #b1cdfb20,0 0 0 21px #b1cdfb0f;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  color: #b7d3fc
-}
-
-.chip span {
-  font-size: 65px;
-  line-height: 1.1;
-  font-weight: 800
-}
-
-.chip em {
-  font: 10px ui-monospace,monospace;
-  letter-spacing: .18em;
-  margin-top: 9px
-}
-
-.chip i {
-  position: absolute;
-  top: 13px;
-  left: 13px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #b7d3fc
+  right: 5.5%;
+  width: 43%;
+  height: auto;
+  transform: translateY(-50%);
+  mix-blend-mode: screen;
+  filter: brightness(2.6)
 }
 
 .trace {
@@ -728,12 +700,20 @@ dialog::backdrop {
   .hero-content {
     padding: 34px 35px
   }
-  .chip {
-    width: 135px;
-    height: 135px
+}
+
+@media(max-width:760px) {
+  .hero {
+    flex-direction: column;
+    align-items: stretch
   }
-  .chip span {
-    font-size: 53px
+  .hero-brand {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(480px,calc(100% - 70px));
+    margin: 0 35px 34px;
+    transform: none
   }
 }
 
@@ -769,18 +749,9 @@ dialog::backdrop {
     width: 65%;
     pointer-events: none
   }
-  .chip {
-    left: 64%;
-    width: 92px;
-    height: 92px;
-    border-radius: 14px;
-    top: 38%
-  }
-  .chip span {
-    font-size: 38px
-  }
-  .chip em {
-    font-size: 7px
+  .hero-brand {
+    width: calc(100% - 40px);
+    margin: 0 20px 27px
   }
   .hero-index,.desktop {
     display: none
