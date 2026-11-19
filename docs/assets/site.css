@@ -212,9 +212,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   position: absolute;
   inset: 0 0 0 auto;
   width: 56%;
+  height: 100%;
   opacity: .9;
-  background-image:radial-gradient(#b4d2ff3a 1px,transparent 1px);
-  background-size: 21px 21px;
+  pointer-events: none;
   mask-image:linear-gradient(to right,transparent,#000 23%)
 }
 
@@ -227,67 +227,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   transform: translateY(-50%);
   mix-blend-mode: screen;
   filter: brightness(2.6)
-}
-
-.trace {
-  position: absolute;
-  border: 1px solid #adc8ef69;
-  border-radius: 24px;
-  width: 39%;
-  height: 22%;
-  transform:rotate(-9deg)
-}
-
-.trace-one {
-  top: 25%;
-  left: 17%;
-  border-right: 0;
-  border-bottom: 0
-}
-
-.trace-two {
-  top: 53%;
-  left: 20%;
-  border-right: 0;
-  border-top: 0
-}
-
-.trace-three {
-  top: 15%;
-  right: 0;
-  border-left: 0;
-  border-top: 0
-}
-
-.trace-four {
-  top: 60%;
-  right: -4%;
-  border-left: 0;
-  border-bottom: 0
-}
-
-.node {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  border: 1px solid #b7d3fc;
-  border-radius: 50%;
-  background: #314c7c
-}
-
-.node-one {
-  top: 30%;
-  left: 16%
-}
-
-.node-two {
-  top: 78%;
-  left: 28%
-}
-
-.node-three {
-  top: 24%;
-  right: 9%
 }
 
 .library {

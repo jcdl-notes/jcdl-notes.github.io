@@ -1,6 +1,30 @@
 "use strict";
 (async () => {
   const $ = id => document.getElementById(id);
+  function drawCircuitTraces(canvas) {
+    const context = canvas?.getContext("2d");
+    if (!context) return;
+    const bundles = [
+      { trace: [[0,156],[155,156],[225,86],[455,86],[507,138],[725,138],[807,56],[960,56]], count: 4, gap: 20 },
+      { trace: [[0,490],[174,490],[238,554],[469,554],[535,488],[756,488],[824,556],[960,556]], count: 4, gap: 20 },
+      { trace: [[565,241],[658,241],[681,218],[960,218]], count: 2, gap: 17 },
+      { trace: [[560,414],[671,414],[721,364],[960,364]], count: 2, gap: 20 }
+    ];
+    context.lineWidth = 2;
+    context.lineJoin = "bevel";
+    for (const { trace, count, gap } of bundles) {
+      for (let lane = 0; lane < count; lane++) {
+        const shift = lane * gap;
+        context.strokeStyle = lane === 0 ? "#b7d3fc68" : "#b7d3fc45";
+        context.beginPath();
+        const [[startX,startY],...points] = trace;
+        context.moveTo(startX,startY + shift);
+        for (const [x,y] of points) context.lineTo(x,y + shift);
+        context.stroke();
+      }
+    }
+  }
+  drawCircuitTraces(document.querySelector(".hero-art"));
   const catalog = window.XinhuoCatalog;
   const libraryURL = new URL("data/library.js",location.href);
   async function loadLibrary() {
