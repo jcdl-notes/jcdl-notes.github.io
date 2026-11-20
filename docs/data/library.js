@@ -95,6 +95,19 @@ window.XINHUO_LIBRARY = {
   ],
   "resources": [
     {
+      "id": "note-9b6abbf3-f7d1-4c87-a0df-7ca8a03266bc",
+      "title": "半导体技术基础笔记zzy",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "完整笔记",
+      "featured": false,
+      "credit": "周子烨",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-20",
+      "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记zzy.pdf"
+    },
+    {
       "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
       "title": "半导体错题 1",
       "kind": "习题整理",
