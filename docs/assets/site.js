@@ -161,7 +161,7 @@
       if (link) {
         const href = link.local && resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
         if (location.protocol !== "file:" || link.local) {
-          const preview = make("a",location.protocol === "file:" ? "在线预览 ↗" : "在线预览 · 连续阅读","action");
+          const preview = make("a",location.protocol === "file:" ? "在线预览 ↗" : "在线预览","action");
           preview.href = location.protocol === "file:" ? href : "./read.html?note="+encodeURIComponent(resource.id);
           if (location.protocol === "file:") {
             preview.target = "_blank";

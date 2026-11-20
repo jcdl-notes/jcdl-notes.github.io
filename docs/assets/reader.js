@@ -55,7 +55,7 @@
   let pending = false;
   $("page-total").textContent = "/ " + metadata.pages;
   pageField.max = String(metadata.pages);
-  state.textContent = "全部 " + metadata.pages + " 页已排好，往下滑即可连续阅读。";
+  state.textContent = "共 " + metadata.pages + " 页。";
   for (let page=1; page<=metadata.pages; page++) {
     const section = document.createElement("section");
     section.className = "reader-page";
