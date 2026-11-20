@@ -242,6 +242,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   margin-bottom: 18px
 }
 
+.library-note {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65
+}
+
 .section-kicker {
   margin: 0 0 3px;
   color:var(--blue);
