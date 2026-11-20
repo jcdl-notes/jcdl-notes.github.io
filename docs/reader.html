@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>在线预览 · 芯火相传</title>
+  <link rel="stylesheet" href="assets/site.css?v=online-reader">
+  <script defer src="assets/catalog.js?v=large-pdfs"></script>
+  <script defer src="assets/reader.js?v=online-reader"></script>
+</head>
+<body>
+  <header class="reader-header">
+    <div class="wrap">
+      <a href="./index.html#library">← 返回资料库</a>
+      <a id="original" class="action" hidden>下载原版 PDF ↓</a>
+      <h1 id="reader-title">在线预览</h1>
+    </div>
+  </header>
+  <main class="wrap reader">
+    <div id="page-toolbar" class="reader-toolbar" hidden>
+      <button class="action" type="button" id="previous">上一页</button>
+      <form id="jump-page">
+        <label for="page-number" class="sr-only">页码</label>
+        <input id="page-number" type="number" inputmode="numeric" required min="1" step="1">
+        <span id="page-total"></span>
+        <button class="action" type="submit">跳转</button>
+      </form>
+      <button class="action" type="button" id="next">下一页</button>
+    </div>
+    <p id="reader-status" class="reader-status" role="status"></p>
+    <button id="page-retry" class="action" type="button" hidden>重试此页</button>
+    <div id="reader-paper" class="reader-paper"></div>
+    <button id="reader-next-bottom" class="action reader-next-bottom" type="button" hidden>下一页 ↓</button>
+    <noscript><p>请开启 JavaScript 使用在线预览。</p></noscript>
+  </main>
+</body>
+</html>

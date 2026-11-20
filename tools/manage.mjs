@@ -28,7 +28,8 @@ const git = async (...args) => (await runGit(gitBinary || "git", args, {cwd:root
 const filenamePattern = /^[a-z0-9][a-z0-9-]*$/;
 const assets = new Map(Object.entries({
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
-  ".css": "text/css; charset=utf-8", ".jpg": "image/jpeg", ".pdf": "application/pdf"
+  ".css": "text/css; charset=utf-8", ".jpg": "image/jpeg", ".pdf": "application/pdf",
+  ".json": "application/json; charset=utf-8"
 }));
 let busy = false;
 
@@ -222,7 +223,8 @@ async function staticFile(response, urlPath) {
   if (["admin/","admin/index.html","admin/editor.js"].includes(relative)) {
     base = join(root,"tools");
     relative = relative.endsWith("editor.js") ? "editor.js" : "editor.html";
-  } else if (relative !== "index.html" && relative !== "data/library.js"
+  } else if (!["index.html","reader.html","data/library.js","previews/index.json"].includes(relative)
+      && !/^previews\/[a-f0-9]{24}\/[1-9]\d*\.jpg$/.test(relative)
       && !/^assets\/[a-z0-9.-]+$/i.test(relative) && !catalog.fileURL(relative)?.local) {
     response.writeHead(404).end();
     return;

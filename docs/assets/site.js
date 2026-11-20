@@ -159,18 +159,19 @@
       const link = catalog.fileURL(resource.file);
       const actions = make("div",null,"file-actions");
       if (link) {
-        const preview = make("a",link.local ? "查看 PDF ↗" : "下载 PDF（" + (resource.bytes / 1e6).toFixed(0) + " MB）↓","action");
         const href = link.local && resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
-        preview.href = href;
-        preview.target = "_blank";
-        preview.rel = "noopener noreferrer";
-        actions.append(preview);
-        if (link.local) {
-          const download = make("a","下载 PDF ↓","action");
-          download.href = href;
-          download.download = resource.title + ".pdf";
-          actions.append(download);
+        if (location.protocol !== "file:" || link.local) {
+          const preview = make("a","在线预览 ↗","action");
+          preview.href = location.protocol === "file:" ? href : "./reader.html?note="+encodeURIComponent(resource.id);
+          preview.target = "_blank";
+          preview.rel = "noopener noreferrer";
+          actions.append(preview);
         }
+        const label = link.local ? "下载 PDF ↓" : "下载 PDF（" + (resource.bytes / 1e6).toFixed(0) + " MB）↓";
+        const download = make("a",label,"action");
+        download.href = href;
+        if (link.local) download.download = resource.title + ".pdf";
+        actions.append(download);
       }
       file.append(actions);
       files.append(file);
