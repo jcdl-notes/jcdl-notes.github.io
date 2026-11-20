@@ -93,5 +93,22 @@ window.XINHUO_LIBRARY = {
       "mark": "微"
     }
   ],
-  "resources": []
+  "resources": [
+    {
+      "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
+      "title": "半导体错题 1",
+      "kind": "习题整理",
+      "credit": "沈明慧",
+      "topics": [],
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "featured": true,
+      "summary": "",
+      "updated": "2026-11-20",
+      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/semiconductor-c60d7007-f053-443c-8c78-2f5300b2c317.pdf",
+      "filename": "半导体错题 1.pdf",
+      "bytes": 162650916,
+      "assetId": 770603680
+    }
+  ]
 };
