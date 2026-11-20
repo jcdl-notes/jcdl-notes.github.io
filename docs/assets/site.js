@@ -143,10 +143,17 @@
     if (!list.length) files.append(make("p", "这门课暂未发布复习资料。","empty"));
     for (const resource of list) {
       const file = make("article",null,"file-card");
-      const meta = [resource.kind,editions.get(resource.edition),resource.updated];
-      if (resource.featured) meta.unshift("优秀笔记");
-      if (resource.credit) meta.push("整理者 " + resource.credit);
-      file.append(make("h3",resource.title),make("p",meta.join(" · "),"meta"));
+      const meta = make("p",null,"meta");
+      if (resource.featured) {
+        const label = make("span",null,"featured-note");
+        const star = make("span","★");
+        star.setAttribute("aria-hidden","true");
+        label.append(star," 优秀笔记");
+        meta.append(label," · ");
+      }
+      meta.append(resource.kind);
+      if (resource.credit) meta.append(" · 整理者 " + resource.credit);
+      file.append(make("h3",resource.title),meta);
       if (resource.topics.length) file.append(make("p","知识点 · " + resource.topics.join("、")));
       if (resource.summary) file.append(make("p",resource.summary));
       const link = catalog.fileURL(resource.file);

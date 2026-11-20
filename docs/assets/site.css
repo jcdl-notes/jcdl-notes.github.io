@@ -528,6 +528,12 @@ dialog::backdrop {
   color:var(--muted)
 }
 
+.featured-note {
+  color: #b42332;
+  font-weight: 700;
+  white-space: nowrap
+}
+
 .file-actions {
   margin-top: 9px;
   display: flex;
