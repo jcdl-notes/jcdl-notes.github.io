@@ -928,7 +928,7 @@ dialog::backdrop {
   border: 1px solid var(--line);
   border-radius: 6px;
 }
-.reader-toolbar .action, .reader-next-bottom {
+.reader-toolbar .action {
   min-height: 40px;
 }
 .reader-toolbar button:disabled {
@@ -947,9 +947,15 @@ dialog::backdrop {
   margin: 0 auto;
   background: white;
 }
-.reader-next-bottom {
-  display: block;
-  margin: 16px auto 0;
+.reader-page {
+  margin-bottom: 18px;
+  scroll-margin-top: 62px;
+}
+.reader-page h2 {
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
 }
 .reader [hidden], .reader-header [hidden] {
   display: none;

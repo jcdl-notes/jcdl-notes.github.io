@@ -33,6 +33,22 @@ async function previewKey(resource,isLocal) {
   return hash.digest("hex").slice(0,24);
 }
 
+function imageSize(jpeg) {
+  // Poppler emits ordinary baseline JPEGs; the SOF segment carries native dimensions.
+  for (let offset=2; offset+1<jpeg.length && jpeg[offset]===0xff;) {
+    while (jpeg[offset]===0xff) offset++;
+    const marker = jpeg[offset++];
+    if (offset+2>jpeg.length) break;
+    const length = jpeg.readUInt16BE(offset);
+    if (length<2 || offset+length>jpeg.length) break;
+    if ([0xc0,0xc1,0xc2].includes(marker) && length>=7) {
+      return [jpeg.readUInt16BE(offset+5),jpeg.readUInt16BE(offset+3)];
+    }
+    offset += length;
+  }
+  throw new Error("Preview JPEG dimensions are unavailable.");
+}
+
 async function readPreview(directory) {
   try {
     const info = JSON.parse(await readFile(join(directory,"meta.json"),"utf8"));
@@ -112,7 +128,11 @@ for (const resource of data.resources) {
     const directory = join(output,key);
     await cp(result.directory,directory,{recursive:true});
     total += result.bytes;
-    entries[resource.id] = {key,pages:result.pages,file:resource.file,revision:resource.revision || ""};
+    const sizes = [];
+    for (let page=1; page<=result.pages; page++) {
+      sizes.push(imageSize(await readFile(join(result.directory,page+".jpg"))));
+    }
+    entries[resource.id] = {key,pages:result.pages,file:resource.file,revision:resource.revision || "",sizes};
     console.log("Preview ready:",resource.id,result.pages+" pages",result.bytes+" bytes");
   } catch (error) {
     console.warn("Preview unavailable:",resource.id,error.message.split(/\r?\n/)[0]);

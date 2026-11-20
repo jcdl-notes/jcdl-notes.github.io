@@ -45,51 +45,80 @@
   }
 
   const paper = $("reader-paper");
-  const bottomNext = $("reader-next-bottom");
-  const retry = $("page-retry");
-  let page = 1;
-  let sequence = 0;
+  const toolbar = $("page-toolbar");
+  const pages = [];
+  const fragment = document.createDocumentFragment();
+  let current = 1;
+  let pending = false;
   $("page-total").textContent = "/ " + metadata.pages;
   pageField.max = String(metadata.pages);
-  $("page-toolbar").hidden = false;
-  function showPage(value) {
-    if (!Number.isInteger(value) || value < 1 || value > metadata.pages) return;
-    page = value;
-    const token = ++sequence;
+  state.textContent = "共 " + metadata.pages + " 页，向下滑动继续阅读。";
+  for (let page=1; page<=metadata.pages; page++) {
+    const section = document.createElement("section");
+    section.className = "reader-page";
+    const label = document.createElement("h2");
+    label.textContent = "第 " + page + " 页";
+    const retry = document.createElement("button");
+    retry.className = "action";
+    retry.type = "button";
+    retry.textContent = "重试加载第 " + page + " 页";
     retry.hidden = true;
-    bottomNext.hidden = true;
-    pageField.value = String(page);
-    $("previous").disabled = page === 1;
-    $("next").disabled = page === metadata.pages;
-    state.textContent = "正在加载第 " + value + " 页…";
-    paper.replaceChildren();
     const img = new Image();
-    img.alt = "第 " + value + " 页";
+    img.alt = label.textContent;
+    const [width,height] = metadata.sizes?.[page-1] || [1188,1680];
+    img.width = width;
+    img.height = height;
+    img.loading = page === 1 ? "eager" : "lazy";
     img.decoding = "async";
-    img.addEventListener("load",()=>{
-      if (token !== sequence) return;
-      state.textContent = "第 " + value + " 页，共 " + metadata.pages + " 页";
-      paper.replaceChildren(img);
-      bottomNext.hidden = value >= metadata.pages;
+    const src = "previews/"+metadata.key+"/"+page+".jpg";
+    img.addEventListener("load",()=>{ retry.hidden = true; });
+    img.addEventListener("error",()=>{ retry.hidden = false; });
+    retry.addEventListener("click",()=>{
+      retry.hidden = true;
+      img.src = src+"?retry="+Date.now();
     });
-    img.addEventListener("error",()=>{
-      if (token !== sequence) return;
-      state.textContent = "第 " + value + " 页未能加载。";
-      retry.hidden = false;
-    });
-    img.src = "previews/"+metadata.key+"/"+value+".jpg";
+    img.src = src;
+    section.append(label,retry,img);
+    pages.push(section);
+    fragment.append(section);
+  }
+  paper.append(fragment);
+  toolbar.hidden = false;
+
+  function updatePage() {
+    pending = false;
+    const line = toolbar.offsetHeight + 18;
+    let low = 0;
+    let high = pages.length-1;
+    while (low < high) {
+      const middle = Math.ceil((low+high)/2);
+      if (pages[middle].getBoundingClientRect().top <= line) low = middle;
+      else high = middle-1;
+    }
+    current = low+1;
+    if (window.scrollY+window.innerHeight >= document.documentElement.scrollHeight-2) current = pages.length;
+    if (document.activeElement !== pageField) pageField.value = String(current);
+    $("previous").disabled = current === 1;
+    $("next").disabled = current === metadata.pages;
+  }
+  function scheduleUpdate() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(updatePage);
   }
   function go(value) {
-    showPage(value);
-    window.scrollTo(0,0);
+    if (!Number.isInteger(value) || !pages[value-1]) return;
+    pageField.blur();
+    pages[value-1].scrollIntoView({block:"start",behavior:"instant"});
+    updatePage();
   }
-  $("previous").addEventListener("click",()=>go(page-1));
-  $("next").addEventListener("click",()=>go(page+1));
-  bottomNext.addEventListener("click",()=>go(page+1));
-  retry.addEventListener("click",()=>showPage(page));
+  $("previous").addEventListener("click",()=>go(current-1));
+  $("next").addEventListener("click",()=>go(current+1));
   $("jump-page").addEventListener("submit",event=>{
     event.preventDefault();
     go(Number(pageField.value));
   });
-  showPage(1);
+  window.addEventListener("scroll",scheduleUpdate,{passive:true});
+  window.addEventListener("resize",scheduleUpdate);
+  updatePage();
 })();
