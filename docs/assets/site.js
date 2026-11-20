@@ -161,10 +161,12 @@
       if (link) {
         const href = link.local && resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
         if (location.protocol !== "file:" || link.local) {
-          const preview = make("a","在线预览 ↗","action");
-          preview.href = location.protocol === "file:" ? href : "./reader.html?note="+encodeURIComponent(resource.id);
-          preview.target = "_blank";
-          preview.rel = "noopener noreferrer";
+          const preview = make("a",location.protocol === "file:" ? "在线预览 ↗" : "在线预览 · 连续阅读","action");
+          preview.href = location.protocol === "file:" ? href : "./read.html?note="+encodeURIComponent(resource.id);
+          if (location.protocol === "file:") {
+            preview.target = "_blank";
+            preview.rel = "noopener noreferrer";
+          }
           actions.append(preview);
         }
         const label = link.local ? "下载 PDF ↓" : "下载 PDF（" + (resource.bytes / 1e6).toFixed(0) + " MB）↓";

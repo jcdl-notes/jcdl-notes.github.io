@@ -1,5 +1,9 @@
 "use strict";
 (async () => {
+  if (location.pathname.endsWith("/reader.html")) {
+    location.replace("./read.html"+location.search+location.hash);
+    return;
+  }
   const $ = id => document.getElementById(id);
   const state = $("reader-status");
   const pageField = $("page-number");
@@ -48,11 +52,10 @@
   const toolbar = $("page-toolbar");
   const pages = [];
   const fragment = document.createDocumentFragment();
-  let current = 1;
   let pending = false;
   $("page-total").textContent = "/ " + metadata.pages;
   pageField.max = String(metadata.pages);
-  state.textContent = "共 " + metadata.pages + " 页，向下滑动继续阅读。";
+  state.textContent = "全部 " + metadata.pages + " 页已排好，往下滑即可连续阅读。";
   for (let page=1; page<=metadata.pages; page++) {
     const section = document.createElement("section");
     section.className = "reader-page";
@@ -95,11 +98,9 @@
       if (pages[middle].getBoundingClientRect().top <= line) low = middle;
       else high = middle-1;
     }
-    current = low+1;
+    let current = low+1;
     if (window.scrollY+window.innerHeight >= document.documentElement.scrollHeight-2) current = pages.length;
     if (document.activeElement !== pageField) pageField.value = String(current);
-    $("previous").disabled = current === 1;
-    $("next").disabled = current === metadata.pages;
   }
   function scheduleUpdate() {
     if (pending) return;
@@ -112,8 +113,6 @@
     pages[value-1].scrollIntoView({block:"start",behavior:"instant"});
     updatePage();
   }
-  $("previous").addEventListener("click",()=>go(current-1));
-  $("next").addEventListener("click",()=>go(current+1));
   $("jump-page").addEventListener("submit",event=>{
     event.preventDefault();
     go(Number(pageField.value));

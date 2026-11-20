@@ -931,9 +931,9 @@ dialog::backdrop {
 .reader-toolbar .action {
   min-height: 40px;
 }
-.reader-toolbar button:disabled {
-  opacity: .45;
-  cursor: default;
+.reader-mode {
+  color: var(--muted);
+  font-size: 13px;
 }
 .reader-status {
   margin: 10px 0;

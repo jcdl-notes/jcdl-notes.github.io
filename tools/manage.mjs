@@ -223,7 +223,7 @@ async function staticFile(response, urlPath) {
   if (["admin/","admin/index.html","admin/editor.js"].includes(relative)) {
     base = join(root,"tools");
     relative = relative.endsWith("editor.js") ? "editor.js" : "editor.html";
-  } else if (!["index.html","reader.html","data/library.js","previews/index.json"].includes(relative)
+  } else if (!["index.html","reader.html","read.html","data/library.js","previews/index.json"].includes(relative)
       && !/^previews\/[a-f0-9]{24}\/[1-9]\d*\.jpg$/.test(relative)
       && !/^assets\/[a-z0-9.-]+$/i.test(relative) && !catalog.fileURL(relative)?.local) {
     response.writeHead(404).end();

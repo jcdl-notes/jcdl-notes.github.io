@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>连续阅读 · 芯火相传</title>
+  <link rel="stylesheet" href="assets/site.css?v=scroll-reading">
+  <script defer src="assets/catalog.js?v=large-pdfs"></script>
+  <script defer src="assets/reader.js?v=scroll-reading"></script>
+</head>
+<body>
+  <header class="reader-header">
+    <div class="wrap">
+      <a href="./index.html#library">← 返回资料库</a>
+      <a id="original" class="action" hidden>下载原版 PDF ↓</a>
+      <h1 id="reader-title">连续阅读</h1>
+    </div>
+  </header>
+  <main class="wrap reader">
+    <div id="page-toolbar" class="reader-toolbar" hidden>
+      <form id="jump-page">
+        <label for="page-number" class="sr-only">页码</label>
+        <input id="page-number" type="number" inputmode="numeric" required min="1" step="1">
+        <span id="page-total"></span>
+        <button class="action" type="submit">跳转</button>
+      </form>
+      <span class="reader-mode">往下滑查看后续页</span>
+    </div>
+    <p id="reader-status" class="reader-status" role="status"></p>
+    <div id="reader-paper" class="reader-paper"></div>
+    <noscript><p>请开启 JavaScript 使用在线预览。</p></noscript>
+  </main>
+</body>
+</html>
