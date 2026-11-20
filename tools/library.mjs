@@ -49,8 +49,8 @@ export function notePath(data, note) {
 
 // Keep the old PDF outside the published tree until the new index has been written.
 export async function updateNote(data, old, next, pdf) {
-  const source = notePath(data,old);
-  const target = next ? notePath(data,next) : null;
+  const source = catalog.fileURL(old.file)?.local ? notePath(data,old) : null;
+  const target = next && catalog.fileURL(next.file)?.local ? notePath(data,next) : null;
   const resources = data.resources.filter(item => item.id !== old.id);
   if (next) resources.push(next);
   const updatedData = {...data,resources};
@@ -64,8 +64,10 @@ export async function updateNote(data, old, next, pdf) {
   let transferred = false;
   let targetWritten = false;
   try {
-    await rename(source,backup);
-    transferred = true;
+    if (source) {
+      await rename(source,backup);
+      transferred = true;
+    }
     if (target) {
       if (pdf) {
         const handle = await open(target,"wx");
@@ -85,7 +87,7 @@ export async function updateNote(data, old, next, pdf) {
     throw error;
   }
   try {
-    await unlink(backup);
+    if (transferred) await unlink(backup);
     await rmdir(backupDirectory);
   } catch (error) { console.error("无法清理本地 PDF 备份：",error.code); }
   return updatedData;
@@ -103,7 +105,7 @@ export async function rebuildIndex(data = null) {
   data ??= await readLibrary();
   assertValid(data);
   const previous = new Map(data.resources.map(item => [item.file, item]));
-  const resources = [];
+  const resources = data.resources.filter(item => !catalog.fileURL(item.file).local);
   for (const edition of data.editions) {
     for (const course of data.courses) {
       for (const bucket of ["general", "featured"]) {

@@ -5,6 +5,7 @@
   const category = $("category");
   const editor = $("edit-form");
   const dialog = $("edit-note");
+  const catalog = window.XinhuoCatalog;
   const field = (owner,name) => owner.elements.namedItem(name);
   let data;
   let repository;
@@ -53,11 +54,12 @@
       const actions = document.createElement("div");
       actions.className = "entry-actions";
       const open = document.createElement("a");
+      const link = catalog.fileURL(item.file);
       open.className = "action";
-      open.href = "/" + item.file.split("/").map(encodeURIComponent).join("/");
+      open.href = link.local ? "/" + link.href.slice(2) : link.href;
       open.target = "_blank";
       open.rel = "noopener noreferrer";
-      open.textContent = "预览";
+      open.textContent = link.local ? "预览" : "下载 PDF";
       function button(label,callback,style="") {
         const node = document.createElement("button");
         node.type = "button";
@@ -128,7 +130,8 @@
     dialog.showModal();
   }
   function deleteNote(item) {
-    if (busy || !confirm("删除《" + item.title + "》？学生端的目录和 PDF 链接会在发布后移除。")) return;
+    const reminder = catalog.fileURL(item.file).local ? "" : " GitHub 附件中的原下载地址会保留。";
+    if (busy || !confirm("删除《" + item.title + "》？学生端的目录和 PDF 链接会在发布后移除。" + reminder)) return;
     run(async()=>{
       const state = await request("delete?" + new URLSearchParams({id:item.id}),"","text/plain");
       message("已删除《" + item.title + "》。" + syncMessage(state),state === "failed");
@@ -141,7 +144,7 @@
       for (const key of ["title","edition","course","credit","kind","topics"]) values.set(key,field(editor,key).value);
       values.set("featured",field(editor,"featured").checked ? "1" : "0");
       const file = field(editor,"pdf").files[0];
-      $("edit-note-status").textContent = "正在保存…";
+      $("edit-note-status").textContent = file?.size > 25 * 1024 * 1024 ? "正在上传大文件，请保持此页面打开…" : "正在保存…";
       const state = await request("edit?" + values,file || "",file ? "application/pdf" : "text/plain");
       dialog.close();
       message("已保存修改。" + syncMessage(state),state === "failed");
@@ -157,7 +160,8 @@
       let completed=0;
       let state;
       for (const file of selected) {
-        message("正在上传 " + (completed+1) + "/" + selected.length + " · " + file.name);
+        const note = file.size > 25 * 1024 * 1024 ? "。正在处理大文件，请保持此页面打开。" : "";
+        message("正在上传 " + (completed+1) + "/" + selected.length + " · " + file.name + note);
         const values = new URLSearchParams({
           name:file.name, edition:field(form,"edition").value, course:field(form,"course").value,
           kind:field(form,"kind").value, credit:field(form,"credit").value, topics:field(form,"topics").value,

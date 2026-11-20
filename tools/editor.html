@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>芯火相传 · 资料管理端</title>
   <link rel="stylesheet" href="../assets/site.css">
-  <script defer src="editor.js"></script>
+  <script defer src="../assets/catalog.js?v=large-pdfs"></script>
+  <script defer src="editor.js?v=large-pdfs"></script>
 </head>
 <body>
 <header class="top"><div class="wrap top-row">
@@ -26,7 +27,7 @@
       <label class="wide">选择 PDF<input name="pdf" type="file" accept=".pdf,application/pdf" multiple required></label>
       <label class="checkbox"><input type="checkbox" name="featured">标记为优秀资料</label>
     </div>
-    <p>可一次上传同一门课的多份 PDF。默认用文件名作为标题。</p>
+    <p>可一次选择同一门课的多份 PDF。连接正式站时，单份上限 512 MiB，超过 25 MiB 的文件会自动上传到 GitHub 附件。</p>
     <div class="upload-details">
       <p class="section-kicker">资料信息（可选）</p>
       <div class="editor-fields">

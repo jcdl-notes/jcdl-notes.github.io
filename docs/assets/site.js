@@ -152,8 +152,8 @@
       const link = catalog.fileURL(resource.file);
       const actions = make("div",null,"file-actions");
       if (link) {
-        const preview = make("a",link.local ? "查看 PDF ↗" : "打开资料链接 ↗","action");
-        const href = resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
+        const preview = make("a",link.local ? "查看 PDF ↗" : "下载 PDF（" + (resource.bytes / 1e6).toFixed(0) + " MB）↓","action");
+        const href = link.local && resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
         preview.href = href;
         preview.target = "_blank";
         preview.rel = "noopener noreferrer";

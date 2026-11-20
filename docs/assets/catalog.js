@@ -9,6 +9,9 @@
     && !/^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(name);
   function fileURL(value) {
     if (typeof value !== "string") return null;
+    if (/^https:\/\/github\.com\/[a-z0-9-]+\/[a-z0-9_.-]+\/releases\/download\/course-pdfs\/[a-z0-9-]+\.pdf$/i.test(value)) {
+      return {href: value, local: false};
+    }
     const [root,edition,course,bucket,name,...extra] = value.split("/");
     if (root !== "files" || extra.length || ![edition,course].every(id => id && /^[a-z0-9-]+$/.test(id))
         || !["general","featured"].includes(bucket) || !safeFilename(name)) return null;
@@ -44,7 +47,10 @@
           || !Array.isArray(resource.topics) || !resource.topics.every(nonempty)) {
         errors.push(label + " 的标题、课程、届次或资料字段有误。");
       }
-      if (!fileURL(resource?.file)) errors.push(label + " 的站内 PDF 路径无效。");
+      const link = fileURL(resource?.file);
+      if (!link || (!link.local && !(Number.isSafeInteger(resource.bytes) && resource.bytes > 0))) {
+        errors.push(label + " 的 PDF 地址或大小无效。");
+      }
       const date = new Date(resource?.updated || "");
       if (!/^\d{4}-\d{2}-\d{2}$/.test(resource?.updated || "") || Number.isNaN(date.getTime()) || date.toISOString().slice(0,10) !== resource.updated) {
         errors.push(label + " 的更新日期无效。");

@@ -1,10 +1,12 @@
 import { createServer } from "node:http";
-import { readFile, mkdir, writeFile, unlink } from "node:fs/promises";
+import { readFile, mkdir, writeFile, unlink, mkdtemp, open, rmdir } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { resolve, extname, sep, join } from "node:path";
 import { randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirectory, requirePDF, isoDate, updateNote } from "./library.mjs";
+import { releaseStorage } from "./releases.mjs";
 
 import { credentialPath } from "./admin-settings.mjs";
 
@@ -19,7 +21,8 @@ function authorized(header) {
 }
 const port = Number(process.env.XINHUO_PORT || 8766);
 const origin = "http://127.0.0.1:" + port;
-const maxPDF = 25 * 1024 * 1024;
+const maxLocalPDF = 25 * 1024 * 1024;
+const maxPDF = 512 * 1024 * 1024;
 const runGit = promisify(execFile);
 const git = async (...args) => (await runGit(gitBinary || "git", args, {cwd:root, timeout:75000})).stdout.trim();
 const filenamePattern = /^[a-z0-9][a-z0-9-]*$/;
@@ -80,13 +83,47 @@ function details(query) {
   };
 }
 
-async function readPDF(request) {
-  if (Number(request.headers["content-length"]) > maxPDF) throw new Error("单个 PDF 最大为 25 MB。");
-  const pdf = await bodyBytes(request,maxPDF);
-  requirePDF(pdf);
-  return pdf;
+async function withPDF(request,repository,action) {
+  const limit = repository ? maxPDF : maxLocalPDF;
+  const limitMessage = repository ? "单个 PDF 最大为 512 MiB。" : "超过 25 MiB 的 PDF 需要连接正式站后上传。";
+  if (Number(request.headers["content-length"]) > limit) throw new Error(limitMessage);
+  const directory = await mkdtemp(join(tmpdir(),"xinhuo-pdf-"));
+  const path = join(directory,"upload.pdf");
+  try {
+    const handle = await open(path,"wx+");
+    let bytes = 0;
+    try {
+      for await (const chunk of request.iterator({destroyOnReturn:false})) {
+        bytes += chunk.length;
+        if (bytes > limit) {
+          request.resume();
+          throw new Error(limitMessage);
+        }
+        await handle.writeFile(chunk);
+      }
+      const heading = Buffer.alloc(5);
+      const {bytesRead} = await handle.read(heading,0,5,0);
+      requirePDF(heading.subarray(0,bytesRead));
+    } finally { await handle.close(); }
+    return await action({path,bytes,large:bytes > maxLocalPDF});
+  } finally {
+    await unlink(path).catch(error=>{ if (error.code !== "ENOENT") console.error("清理上传缓存失败：",error.code); });
+    await rmdir(directory).catch(error=>console.error("清理上传目录失败：",error.code));
+  }
 }
-async function upload(request, url) {
+
+async function saveRelease(repository,pdf,resource,save) {
+  const proxy = await git("config","--get","remote.origin.proxy").catch(()=>null);
+  const storage = releaseStorage(repository,gitBinary || "git",proxy);
+  const asset = await storage.issue({path:pdf.path,bytes:pdf.bytes,course:resource.course});
+  try {
+    return await save({...resource,...asset});
+  } catch (error) {
+    await storage.discard(asset.assetId).catch(()=>console.error("清理未收录的 GitHub 附件失败。"));
+    throw error;
+  }
+}
+async function upload(request, url, repository) {
   const data = await readLibrary();
   const edition = url.searchParams.get("edition");
   const course = url.searchParams.get("course");
@@ -94,15 +131,7 @@ async function upload(request, url) {
   const directory = noteDirectory(data, edition, course, bucket);
   const name = url.searchParams.get("name");
   if (!catalog.safeFilename(name)) throw new Error("请选择文件名有效的 PDF。");
-  const bytes = await readPDF(request);
-  await mkdir(directory, {recursive:true});
   const path = join(directory, name);
-  try {
-    await writeFile(path, bytes, {flag:"wx"});
-  } catch (error) {
-    if (error.code === "EEXIST") throw new Error("这门课已收录同名文件，请选择其他文件。");
-    throw error;
-  }
   const resource = {
     id: "note-" + randomUUID(),
     ...details(url.searchParams),
@@ -113,34 +142,60 @@ async function upload(request, url) {
     updated: isoDate(new Date()),
     file: ["files",edition,course,bucket,name].join("/")
   };
-  try {
-    return await rebuildIndex({...data,resources:[...data.resources,resource]});
-  } catch (error) {
-    await unlink(path);
-    throw error;
+  if (data.resources.some(item => item.edition === edition && item.course === course
+      && item.featured === resource.featured && (item.filename || item.file.split("/").at(-1)).toLowerCase() === name.toLowerCase())) {
+    throw new Error("这门课已收录同名文件，请选择其他文件。");
   }
+  return withPDF(request,repository,async pdf=>{
+    if (pdf.large) {
+      return saveRelease(repository,pdf,{...resource,filename:name},async saved=>{
+        const updated = {...data,resources:[...data.resources,saved]};
+        await writeLibrary(updated);
+        return updated;
+      });
+    }
+    await mkdir(directory, {recursive:true});
+    try {
+      await writeFile(path,await readFile(pdf.path),{flag:"wx"});
+    } catch (error) {
+      if (error.code === "EEXIST") throw new Error("这门课已收录同名文件，请选择其他文件。");
+      throw error;
+    }
+    try {
+      return await rebuildIndex({...data,resources:[...data.resources,resource]});
+    } catch (error) {
+      await unlink(path);
+      throw error;
+    }
+  });
 }
 
-async function editOrDelete(request,url) {
+async function editOrDelete(request,url,repository) {
   const data = await readLibrary();
   const query = url.searchParams;
   const old = data.resources.find(item => item.id === query.get("id"));
   if (!old) throw new Error("资料已变更或删除，请刷新管理页。");
   if (url.pathname.endsWith("/delete")) return updateNote(data,old,null,null);
-  const pdf = request.headers["content-type"] === "application/pdf" ? await readPDF(request) : null;
   const edition = query.get("edition");
   const course = query.get("course");
   const featured = query.get("featured") === "1";
   const bucket = featured ? "featured" : "general";
   noteDirectory(data,edition,course,bucket);
+  const local = catalog.fileURL(old.file).local;
+  const filename = old.filename || old.file.split("/").at(-1);
+  const localFile = ["files",edition,course,bucket,filename].join("/");
   const next = {
     ...old, ...details(query), edition, course, featured,
     updated: isoDate(new Date()),
-    file: ["files",edition,course,bucket,old.file.split("/").at(-1)].join("/")
+    file: local ? localFile : old.file
   };
-  if (pdf) next.revision = randomUUID();
   if (!next.title) throw new Error("请填写资料标题。");
-  return updateNote(data,old,next,pdf);
+  if (request.headers["content-type"] !== "application/pdf") return updateNote(data,old,next,null);
+  return withPDF(request,repository,async pdf=>{
+    if (pdf.large) return saveRelease(repository,pdf,{...next,filename},saved=>updateNote(data,old,saved,null));
+    const {assetId,bytes,filename:previousName,...metadata} = next;
+    return updateNote(data,old,{...metadata,file:localFile,revision:randomUUID()},await readFile(pdf.path));
+  });
 }
 
 async function addCategory(request) {
@@ -168,7 +223,7 @@ async function staticFile(response, urlPath) {
     base = join(root,"tools");
     relative = relative.endsWith("editor.js") ? "editor.js" : "editor.html";
   } else if (relative !== "index.html" && relative !== "data/library.js"
-      && !/^assets\/[a-z0-9.-]+$/i.test(relative) && !catalog.fileURL(relative)) {
+      && !/^assets\/[a-z0-9.-]+$/i.test(relative) && !catalog.fileURL(relative)?.local) {
     response.writeHead(404).end();
     return;
   }
@@ -206,7 +261,7 @@ const server = createServer(async (request,response) => {
     busy = true;
     try {
       const repository = await publishingRepository();
-      const data = await actions[action](request,url);
+      const data = await actions[action](request,url,repository);
       json(response,200,{data, repository, publish:await sync(repository)});
     } finally { busy = false; }
   } catch (error) {
