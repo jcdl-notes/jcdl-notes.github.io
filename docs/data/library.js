@@ -121,6 +121,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/2021工程数学(3.5学分)(A).pdf"
     },
     {
+      "id": "note-6479f15f-c142-40e5-9698-b97e170abc0c",
+      "title": "2022年工程数学(3.5学分)(A)(22.12.11))",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/engineering-math/featured/2022年工程数学(3.5学分)(A)(22.12.11)).pdf"
+    },
+    {
       "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
       "title": "《固态电子器件》重要基础英文术语",
       "course": "semiconductor",
