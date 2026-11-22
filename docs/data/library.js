@@ -95,6 +95,21 @@ window.XINHUO_LIBRARY = {
   ],
   "resources": [
     {
+      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
+      "title": "《固态电子器件》重要基础英文术语",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/semiconductor/featured/《固态电子器件》重要基础英文术语.pdf"
+    },
+    {
       "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
       "title": "半导体超级题库_20261119152723",
       "course": "semiconductor",
