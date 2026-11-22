@@ -108,6 +108,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/circuits/featured/《电路》必会大题.pdf"
     },
     {
+      "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
+      "title": "2021工程数学(3.5学分)(A)",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/engineering-math/featured/2021工程数学(3.5学分)(A).pdf"
+    },
+    {
       "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
       "title": "《固态电子器件》重要基础英文术语",
       "course": "semiconductor",
