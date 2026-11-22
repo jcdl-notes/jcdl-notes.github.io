@@ -1,4 +1,5 @@
-name: 发布学习资料站
+name: 资料库维护
+run-name: 资料库维护
 on:
   push:
     branches: [main]
