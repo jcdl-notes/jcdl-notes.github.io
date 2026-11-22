@@ -108,6 +108,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/circuits/featured/《电路》必会大题.pdf"
     },
     {
+      "id": "note-2434a115-dfc9-49c0-bcb5-91799f4d3c3b",
+      "title": "C＋＋赛",
+      "course": "cpp",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/cpp/general/C＋＋赛.pdf"
+    },
+    {
       "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
       "title": "2021工程数学(3.5学分)(A)",
       "course": "engineering-math",
