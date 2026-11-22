@@ -101,13 +101,50 @@ export async function updateNote(data, old, next, pdf) {
   } catch (error) { console.error("无法清理本地 PDF 备份：",error.code); }
   return updatedData;
 }
-async function listDirectory(directory) {
+async function listDirectory(directory, recursive = false) {
   try {
-    return await readdir(directory, { withFileTypes: true });
+    return await readdir(directory, { withFileTypes: true, recursive });
   } catch (error) {
     if (error.code === "ENOENT") return [];
     throw error;
   }
+}
+
+async function courseHasPDFs(data, id) {
+  for (const edition of data.editions) {
+    for (const bucket of ["general", "featured"]) {
+      const entries = await listDirectory(noteDirectory(data, edition.id, id, bucket), true);
+      if (entries.some(entry => /\.pdf$/i.test(entry.name))) return true;
+    }
+  }
+  return false;
+}
+
+export async function updateCourse(data, id, action) {
+  assertValid(data);
+  const course = data.courses.find(item => item.id === id);
+  if (!course) {
+    if (action === "delete") return data;
+    throw new Error("课程已删除或不存在，请刷新管理页。");
+  }
+
+  if (action === "delete") {
+    if (data.resources.some(note => note.course === id) || await courseHasPDFs(data, id)) {
+      throw new Error("此课程仍有 PDF，请下架课程以保留资料。");
+    }
+    data.courses = data.courses.filter(item => item.id !== id);
+  } else if (action === "archive") {
+    if (course.archived === true) return data;
+    course.archived = true;
+  } else if (action === "restore") {
+    if (!Object.hasOwn(course, "archived")) return data;
+    delete course.archived;
+  } else {
+    throw new Error("无效的课程操作。");
+  }
+
+  await writeLibrary(data);
+  return data;
 }
 
 export async function rebuildIndex(data = null) {

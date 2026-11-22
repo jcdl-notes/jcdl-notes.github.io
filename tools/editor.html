@@ -6,7 +6,7 @@
   <title>芯火相传 · 资料管理端</title>
   <link rel="stylesheet" href="../assets/site.css">
   <script defer src="../assets/catalog.js?v=large-pdfs"></script>
-  <script defer src="editor.js?v=upload-stability"></script>
+  <script defer src="editor.js?v=course-visibility"></script>
 </head>
 <body>
 <header class="top"><div class="wrap top-row">
@@ -46,6 +46,15 @@
       <label>名称<input name="label" maxlength="80" required placeholder="例如 模拟电子技术"></label>
       <div><button class="action" type="submit">添加</button></div>
     </form>
+    <div class="editor-fields" id="course-management">
+      <label>已建课程<select id="manage-course"></select></label>
+      <p id="course-state" role="status"></p>
+      <div class="entry-actions">
+        <button class="action" type="button" id="course-visibility" hidden>下架课程</button>
+        <button class="action danger" type="button" id="course-delete" hidden>删除课程</button>
+      </div>
+      <p id="course-operation-status" role="status"></p>
+    </div>
   </section>
   <section class="editor-box">
     <div class="admin-list-head"><h2>已收录资料</h2><span id="entry-count"></span></div>

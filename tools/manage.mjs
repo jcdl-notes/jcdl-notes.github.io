@@ -5,7 +5,7 @@ import { resolve, extname, sep, join } from "node:path";
 import { createHash, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
-import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirectory, requirePDF, isoDate, updateNote } from "./library.mjs";
+import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirectory, requirePDF, isoDate, updateNote, updateCourse } from "./library.mjs";
 import { releaseStorage } from "./releases.mjs";
 
 import { credentialPath } from "./admin-settings.mjs";
@@ -218,6 +218,14 @@ async function addCategory(request) {
   return data;
 }
 
+async function changeCourse(request) {
+  const {id, action} = JSON.parse((await bodyBytes(request,8192)).toString("utf8")) ?? {};
+  if (typeof id !== "string" || !filenamePattern.test(id) || !["archive","restore","delete"].includes(action)) {
+    throw new Error("请选择有效的课程和操作。");
+  }
+  return updateCourse(await readLibrary(),id,action);
+}
+
 function json(response, code, data) {
   response.writeHead(code, {"Content-Type":"application/json; charset=utf-8"}).end(JSON.stringify(data));
 }
@@ -268,7 +276,7 @@ const server = createServer(async (request,response) => {
     if (request.method === "GET" && pathname === "/admin/api/library") return json(response,200,{data:adminLibrary(await readLibrary()), repository:await publishingRepository()});
     if (request.method === "GET") return await staticFile(response,pathname);
     const action = pathname.slice("/admin/api/".length);
-    const actions = {upload, category:addCategory, edit:editOrDelete, delete:editOrDelete, publish:readLibrary};
+    const actions = {upload, category:addCategory, course:changeCourse, edit:editOrDelete, delete:editOrDelete, publish:readLibrary};
     if (request.method !== "POST" || !pathname.startsWith("/admin/api/") || !Object.hasOwn(actions,action)) return response.writeHead(404).end();
     if (request.headers.origin !== origin || request.headers["x-xinhuo-editor"] !== "1") return response.writeHead(403).end();
     if (busy) return json(response,409,{message:"有一项更新正在处理，请稍后重试。"});

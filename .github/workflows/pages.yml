@@ -27,11 +27,12 @@ jobs:
           path: .preview-cache
           key: ${{ runner.os }}-pdf-v1-${{ hashFiles('docs/data/library.js', 'docs/files/**/*.pdf', 'tools/build-previews.mjs') }}
           restore-keys: ${{ runner.os }}-pdf-v1-
-      - run: node tools/build-previews.mjs
+      - run: node tools/build-previews.mjs --publish
+        id: website
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: docs
+          path: ${{ steps.website.outputs.directory }}
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: build

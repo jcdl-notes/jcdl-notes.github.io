@@ -31,7 +31,7 @@
   const previewIndex = fresh("previews/index.json").then(response=>response.json()).catch(()=>null);
   let metadata;
   try {
-    const data = catalog.parse(await (await fresh("data/library.js")).text());
+    const data = catalog.publicLibrary(catalog.parse(await (await fresh("data/library.js")).text()));
     const resource = data.resources.find(item=>item.id === note);
     if (!resource) {
       state.textContent = "这份资料可能已经移除，请返回资料库。";

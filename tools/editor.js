@@ -3,6 +3,9 @@
   const $ = id => document.getElementById(id);
   const form = $("upload");
   const category = $("category");
+  const coursePicker = $("manage-course");
+  const visibilityButton = $("course-visibility");
+  const deleteCourseButton = $("course-delete");
   const editor = $("edit-form");
   const dialog = $("edit-note");
   const catalog = window.XinhuoCatalog;
@@ -78,7 +81,7 @@
     const terms = new Map(data.terms.map(term=>[term.id,term.label]));
     const courses = new Map(data.courses.map(course=>[course.id,course.name]));
     const editions = [...data.editions].reverse().map(item=>[item.id,item.label]);
-    const courseOptions = data.courses.map(item=>[item.id,terms.get(item.term) + " · " + courses.get(item.id)]);
+    const courseOptions = data.courses.map(item=>[item.id,terms.get(item.term) + " · " + courses.get(item.id) + (item.archived ? "（已下架）" : "")]);
     for (const target of [form,editor]) {
       options(field(target,"edition"),editions);
       options(field(target,"course"),courseOptions);
@@ -86,9 +89,23 @@
     options(field(editor,"kind"),Array.from(field(form,"kind").options,option=>[option.value,option.label]));
     options($("note-edition"),[["","全部届次"],...editions]);
     options($("note-course"),[["","全部课程"],...courseOptions]);
+    options(coursePicker,[["","选择课程"],...courseOptions]);
     options(field(category,"term"),[...terms]);
     $("sync-status").textContent = repository ? "已连接正式站，保存后自动提交发布。" : "当前更新本机预览。连接 GitHub 后可自动发布。";
     drawEntries();
+    drawCourseManagement();
+  }
+  function drawCourseManagement() {
+    const course = data?.courses.find(item=>item.id === coursePicker.value);
+    const count = course ? data.resources.filter(note=>note.course === course.id).length : 0;
+    visibilityButton.hidden = !course;
+    deleteCourseButton.hidden = !course || count > 0;
+    if (!course) {
+      $("course-state").textContent = "";
+      return;
+    }
+    visibilityButton.textContent = course.archived ? "恢复上架" : "下架课程";
+    $("course-state").textContent = (course.archived ? "已下架" : "已上架") + " · " + count + " 份资料";
   }
   async function request(path, body, type) {
     const headers = {"X-Xinhuo-Editor":"1"};
@@ -198,6 +215,32 @@
       message("已添加“" + values.label.trim() + "”。" + syncMessage(state),state === "failed");
     });
   });
+  function changeCourse(remove = false) {
+    const course = data?.courses.find(item=>item.id === coursePicker.value);
+    if (busy || !course) return;
+    const action = remove ? "delete" : course.archived ? "restore" : "archive";
+    const label = {delete:"删除课程",restore:"恢复上架",archive:"下架课程"}[action];
+    const detail = action === "archive" ? "学生端将隐藏本课程，资料可在管理端继续管理。" : "";
+    if (!confirm(label + "「" + course.name + "」？" + detail)) return;
+    const status = $("course-operation-status");
+    status.classList.remove("error");
+    status.textContent = "正在保存…";
+    run(async()=>{
+      const state = await request("course",JSON.stringify({id:course.id,action}),"application/json");
+      const result = {delete:"已删除课程",restore:"已恢复上架",archive:"已下架课程"}[action];
+      status.textContent = result + "「" + course.name + "」。" + syncMessage(state);
+      status.classList.toggle("error",state === "failed");
+    },error=>{
+      status.textContent = error.message;
+      status.classList.add("error");
+    });
+  }
+  coursePicker.addEventListener("change",()=>{
+    $("course-operation-status").textContent = "";
+    drawCourseManagement();
+  });
+  visibilityButton.addEventListener("click",()=>changeCourse());
+  deleteCourseButton.addEventListener("click",()=>changeCourse(true));
   $("retry").addEventListener("click",()=>run(async()=>{
     const state=await request("publish","", "text/plain");
     message(syncMessage(state),state === "failed");

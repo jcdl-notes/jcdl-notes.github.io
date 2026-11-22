@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { copyFile, mkdir, mkdtemp, open, readFile, readdir, rename, rm, stat, unlink, writeFile } from "node:fs/promises";
+import { appendFile, copyFile, cp, mkdir, mkdtemp, open, readFile, readdir, rename, rm, stat, unlink, writeFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { basename, dirname, join } from "node:path";
 import { promisify } from "node:util";
@@ -9,7 +9,6 @@ import { catalog, docs, root, readLibrary, requirePDF } from "./library.mjs";
 const run = promisify(execFile);
 const environment = {...process.env, LC_ALL:"C"};
 const cache = join(root,".preview-cache");
-const output = join(docs,"previews");
 const curl = process.platform === "win32" ? join(process.env.SystemRoot || "C:\\Windows","System32","curl.exe") : "curl";
 const width = "1680";
 const quality = "86";
@@ -120,11 +119,25 @@ async function render(resource,link,cacheKey) {
   }
 }
 
-if (dirname(output) !== docs || basename(output) !== "previews") throw new Error("Unexpected preview output directory.");
-const data = await readLibrary();
-const errors = catalog.validate(data);
+const source = await readLibrary();
+const errors = catalog.validate(source);
 if (errors.length) throw new Error(errors.join("\n"));
-let total = await bytesIn(docs,output);
+const data = catalog.publicLibrary(source);
+const publish = process.argv.includes("--publish");
+let site = docs;
+if (publish) {
+  site = await mkdtemp(join(process.env.RUNNER_TEMP || root,".site-publish-"));
+  const visibleFiles = new Set(data.resources.map(note=>note.file));
+  const omitted = new Set([join(docs,"previews")]);
+  for (const note of source.resources) {
+    if (!visibleFiles.has(note.file) && catalog.fileURL(note.file).local) omitted.add(join(docs,note.file));
+  }
+  await cp(docs,site,{recursive:true,filter:path=>!omitted.has(path)});
+  await writeFile(join(site,"data","library.js"),catalog.serialize(data));
+}
+const output = join(site,"previews");
+if (dirname(output) !== site || basename(output) !== "previews") throw new Error("Unexpected preview output directory.");
+let total = await bytesIn(site,output);
 if (total > pageBudget) throw new Error("Website files exceed the Pages publishing budget before preview generation.");
 await mkdir(cache,{recursive:true});
 await rm(output,{recursive:true,force:true});
@@ -153,3 +166,7 @@ for (const resource of data.resources) {
 }
 await writeFile(join(output,"index.json"),JSON.stringify(entries));
 console.log("Online previews ready:",Object.keys(entries).length+"/"+data.resources.length,"published bytes:",total);
+if (publish) {
+  if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT,"directory="+site+"\n");
+  else console.log("Website artifact ready:",site);
+}

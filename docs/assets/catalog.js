@@ -35,6 +35,7 @@
     data.terms.forEach(item => {if (!nonempty(item?.label)) errors.push("学期缺少名称。");});
     data.courses.forEach(item => {
       if (!item || !termIds.has(item.term) || !nonempty(item.name) || !nonempty(item.mark)) errors.push("课程信息不完整：" + (item?.id || "未知"));
+      else if (item.archived !== undefined && typeof item.archived !== "boolean") errors.push("课程的下架状态无效：" + item.name);
     });
     data.editions.forEach(item => {
       if (!nonempty(item?.label)) errors.push("届次缺少名称。");
@@ -58,11 +59,17 @@
     });
     return errors;
   }
+  function publicLibrary(data) {
+    const courses = data.courses.filter(course => !course.archived);
+    if (courses.length === data.courses.length) return data;
+    const visible = new Set(courses.map(course => course.id));
+    return {...data,courses,resources:data.resources.filter(note => visible.has(note.course))};
+  }
   function parse(source) {
     const normalized = source.trim();
     if (!normalized.startsWith(prefix) || !normalized.endsWith(";")) throw new Error("无法读取资料目录。");
     return JSON.parse(normalized.slice(prefix.length, -1));
   }
   function serialize(data) { return prefix + JSON.stringify(data, null, 2) + ";\n"; }
-  globalThis.XinhuoCatalog = {kinds, fileURL, safeFilename, validate, parse, serialize};
+  globalThis.XinhuoCatalog = {kinds, fileURL, safeFilename, validate, publicLibrary, parse, serialize};
 })();
