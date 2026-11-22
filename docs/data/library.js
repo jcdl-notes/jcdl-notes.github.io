@@ -121,6 +121,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/cpp/general/C＋＋赛.pdf"
     },
     {
+      "id": "note-ff487669-cf05-4bfe-abdb-6be595d58cf0",
+      "title": "C++指针练习题",
+      "course": "cpp",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/cpp/general/C++指针练习题.pdf"
+    },
+    {
       "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
       "title": "2021工程数学(3.5学分)(A)",
       "course": "engineering-math",
