@@ -96,7 +96,7 @@ window.XINHUO_LIBRARY = {
   "resources": [
     {
       "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
-      "title": "半导体错题 1",
+      "title": "半导体习题",
       "kind": "习题整理",
       "credit": "沈明慧",
       "topics": [],
