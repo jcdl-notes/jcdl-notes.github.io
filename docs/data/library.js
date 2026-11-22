@@ -155,6 +155,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/featured/半导体题目.pdf"
     },
     {
+      "id": "note-c9c52ed1-66e8-4b50-beee-aa8372a71bc2",
+      "title": "半导体技术基础笔记供参考",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "完整笔记",
+      "featured": false,
+      "credit": "",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记供参考.pdf"
+    },
+    {
       "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
       "title": "半导体习题",
       "kind": "习题整理",
