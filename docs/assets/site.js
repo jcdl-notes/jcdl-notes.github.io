@@ -31,7 +31,7 @@
     if (location.protocol !== "file:") {
       // Share one CDN cache entry per minute so a new deployment is seen promptly.
       libraryURL.searchParams.set("v",String(Math.floor(Date.now()/60000)));
-      const result = await fetch(libraryURL,{cache:"no-cache"});
+      const result = await fetch(libraryURL,{cache:"no-cache",signal:AbortSignal.timeout?.(20000)});
       if (!result.ok) throw new Error("HTTP " + result.status);
       return catalog.parse(await result.text());
     }
@@ -43,20 +43,24 @@
       document.head.append(script);
     });
   }
+  const catalogStatus = make("p","正在加载资料…","empty");
+  catalogStatus.setAttribute("role","status");
+  $("course-grid").append(catalogStatus);
   let data;
-  try { data = await loadLibrary(); }
-  catch { $("course-grid").textContent = "暂时无法加载资料，请刷新页面重试。"; return; }
-  const errors = catalog.validate(data);
+  try {
+    data = await loadLibrary();
+    const errors = catalog.validate(data);
+    if (errors.length) throw new Error(errors.join("\n"));
+  } catch (error) {
+    catalogStatus.textContent = "暂时无法加载资料，请刷新页面重试。";
+    console.error(error.message);
+    return;
+  }
   function make(tag, content, className) {
     const node = document.createElement(tag);
     if (content) node.textContent = content;
     if (className) node.className = className;
     return node;
-  }
-  if (errors.length) {
-    $("course-grid").append(make("p","资料索引暂时无法读取。请稍后刷新页面。","empty"));
-    console.error(errors);
-    return;
   }
   const terms = new Map(data.terms.map(term => [term.id, term.label]));
   const editions = new Map(data.editions.map(edition => [edition.id, edition.label]));
@@ -162,7 +166,12 @@
         const href = link.local && resource.revision ? link.href + "?v=" + encodeURIComponent(resource.revision) : link.href;
         if (location.protocol !== "file:" || link.local) {
           const preview = make("a",location.protocol === "file:" ? "在线预览 ↗" : "在线预览","action");
-          preview.href = location.protocol === "file:" ? href : "./read.html?note="+encodeURIComponent(resource.id);
+          const previewQuery = new URLSearchParams({note:resource.id});
+          const filters = new URLSearchParams(location.search);
+          for (const key of ["term","q","edition","featured"]) {
+            if (filters.has(key)) previewQuery.set(key,filters.get(key));
+          }
+          preview.href = location.protocol === "file:" ? href : "./read.html?"+previewQuery;
           if (location.protocol === "file:") {
             preview.target = "_blank";
             preview.rel = "noopener noreferrer";

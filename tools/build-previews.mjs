@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { cp, mkdir, mkdtemp, open, readFile, readdir, rename, rm, stat, unlink, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, mkdtemp, open, readFile, readdir, rename, rm, stat, unlink, writeFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { basename, dirname, join } from "node:path";
 import { promisify } from "node:util";
@@ -35,6 +35,7 @@ async function previewKey(resource,isLocal) {
 
 function imageSize(jpeg) {
   // Poppler emits ordinary baseline JPEGs; the SOF segment carries native dimensions.
+  if (jpeg.length < 4 || jpeg.readUInt16BE(0) !== 0xffd8 || jpeg.readUInt16BE(jpeg.length-2) !== 0xffd9) return null;
   for (let offset=2; offset+1<jpeg.length && jpeg[offset]===0xff;) {
     while (jpeg[offset]===0xff) offset++;
     const marker = jpeg[offset++];
@@ -46,17 +47,27 @@ function imageSize(jpeg) {
     }
     offset += length;
   }
-  throw new Error("Preview JPEG dimensions are unavailable.");
+  return null;
+}
+
+async function previewImages(directory,pages) {
+  const sizes = [];
+  let bytes = 0;
+  for (let page = 1; page <= pages; page++) {
+    const jpeg = await readFile(join(directory,page+".jpg"));
+    const size = imageSize(jpeg);
+    if (!size?.every(value=>value > 0)) return null;
+    sizes.push(size);
+    bytes += jpeg.length;
+  }
+  return {pages,bytes,sizes};
 }
 
 async function readPreview(directory) {
   try {
     const info = JSON.parse(await readFile(join(directory,"meta.json"),"utf8"));
-    if (!Number.isSafeInteger(info.pages) || info.pages < 1 || !Number.isSafeInteger(info.bytes) || info.bytes < 1) return null;
-    for (let page = 1; page <= info.pages; page++) {
-      if (!(await stat(join(directory,page+".jpg"))).size) return null;
-    }
-    return info;
+    if (!Number.isSafeInteger(info?.pages) || info.pages < 1) return null;
+    return await previewImages(directory,info.pages);
   } catch (error) {
     if (error.code === "ENOENT" || error instanceof SyntaxError) return null;
     throw error;
@@ -92,15 +103,14 @@ async function render(resource,link,cacheKey) {
       "-forcenum",pdf,join(temp,"page")],{env:environment,timeout:480000});
     const images = (await readdir(temp)).map(name=>[name,Number(pagePattern.exec(name)?.[1])]).filter(([,number])=>number);
     if (images.length !== pages) throw new Error("PDF preview omitted one or more pages.");
-    let bytes = 0;
     for (const [name,page] of images) {
       if (page > pages) throw new Error("Unexpected preview page number.");
-      bytes += (await stat(join(temp,name))).size;
       await rename(join(temp,name),join(temp,page+".jpg"));
     }
     if (!link.local) await unlink(pdf);
-    const info = {pages,bytes};
-    await writeFile(join(temp,"meta.json"),JSON.stringify(info));
+    const info = await previewImages(temp,pages);
+    if (!info) throw new Error("Preview JPEG dimensions are unavailable.");
+    await writeFile(join(temp,"meta.json"),JSON.stringify({pages,bytes:info.bytes}));
     if (dirname(target) !== cache) throw new Error("Unexpected preview cache path.");
     await rm(target,{recursive:true,force:true});
     await rename(temp,target);
@@ -110,33 +120,36 @@ async function render(resource,link,cacheKey) {
   }
 }
 
-await mkdir(cache,{recursive:true});
 if (dirname(output) !== docs || basename(output) !== "previews") throw new Error("Unexpected preview output directory.");
-await rm(output,{recursive:true,force:true});
-await mkdir(output,{recursive:true});
-const entries = Object.create(null);
 const data = await readLibrary();
 const errors = catalog.validate(data);
 if (errors.length) throw new Error(errors.join("\n"));
 let total = await bytesIn(docs,output);
+if (total > pageBudget) throw new Error("Website files exceed the Pages publishing budget before preview generation.");
+await mkdir(cache,{recursive:true});
+await rm(output,{recursive:true,force:true});
+await mkdir(output,{recursive:true});
+const entries = Object.create(null);
 for (const resource of data.resources) {
+  let key, result;
   try {
     const link = catalog.fileURL(resource.file);
-    const key = await previewKey(resource,link.local);
-    const result = await render(resource,link,key);
+    key = await previewKey(resource,link.local);
+    result = await render(resource,link,key);
     if (total + result.bytes > pageBudget) throw new Error("Website preview size exceeds the publishing budget.");
-    const directory = join(output,key);
-    await cp(result.directory,directory,{recursive:true});
-    total += result.bytes;
-    const sizes = [];
-    for (let page=1; page<=result.pages; page++) {
-      sizes.push(imageSize(await readFile(join(result.directory,page+".jpg"))));
-    }
-    entries[resource.id] = {key,pages:result.pages,file:resource.file,revision:resource.revision || "",sizes};
-    console.log("Preview ready:",resource.id,result.pages+" pages",result.bytes+" bytes");
   } catch (error) {
     console.warn("Preview unavailable:",resource.id,error.message.split(/\r?\n/)[0]);
+    continue;
   }
+  const directory = join(output,key);
+  await mkdir(directory,{recursive:true});
+  for (let page=1; page<=result.pages; page++) {
+    const filename = page+".jpg";
+    await copyFile(join(result.directory,filename),join(directory,filename));
+  }
+  total += result.bytes;
+  entries[resource.id] = {key,pages:result.pages,file:resource.file,revision:resource.revision || "",sizes:result.sizes};
+  console.log("Preview ready:",resource.id,result.pages+" pages",result.bytes+" bytes");
 }
 await writeFile(join(output,"index.json"),JSON.stringify(entries));
 console.log("Online previews ready:",Object.keys(entries).length+"/"+data.resources.length,"published bytes:",total);

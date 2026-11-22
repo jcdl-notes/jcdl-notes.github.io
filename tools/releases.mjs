@@ -23,7 +23,7 @@ function command(program,args,input) {
 }
 
 export function releaseStorage(repository,gitBinary,proxy) {
-  const group = /^https:\/\/github\.com\/([a-z0-9-]+\/[a-z0-9_.-]+)\.git$/i.exec(repository || "")?.[1];
+  const group = /^https:\/\/github\.com\/([a-z0-9-]+\/[a-z0-9_.-]+)$/i.exec(repository?.replace(/\.git$/i,"") || "")?.[1];
   if (!group) throw new Error("大文件需要连接正式站的 GitHub 仓库。");
   const api = "https://api.github.com/repos/" + group;
   let credential;

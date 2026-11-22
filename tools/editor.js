@@ -95,7 +95,7 @@
     if (type) headers["Content-Type"]=type;
     const response = await fetch("/admin/api/" + path,body === undefined ? {} : {method:"POST",body,headers});
     if (response.status === 401) throw new Error("管理端登录已失效，请刷新页面重新登录。");
-    const result = await response.json();
+    const result = await response.json().catch(()=>{ throw new Error("管理端返回异常，请刷新后重试。"); });
     if (!response.ok) throw new Error(result.message || "更新失败。");
     data=result.data;
     repository=result.repository;
@@ -121,7 +121,7 @@
   }
   function edit(item) {
     if (busy) return;
-    editing = item.id;
+    editing = {id:item.id,version:item.version};
     for (const key of ["title","edition","course","credit","kind"]) field(editor,key).value = item[key];
     field(editor,"topics").value = item.topics.join("、");
     field(editor,"featured").checked = item.featured;
@@ -133,14 +133,14 @@
     const reminder = catalog.fileURL(item.file).local ? "" : " GitHub 附件中的原下载地址会保留。";
     if (busy || !confirm("删除《" + item.title + "》？学生端的目录和 PDF 链接会在发布后移除。" + reminder)) return;
     run(async()=>{
-      const state = await request("delete?" + new URLSearchParams({id:item.id}),"","text/plain");
+      const state = await request("delete?" + new URLSearchParams({id:item.id,version:item.version}),"","text/plain");
       message("已删除《" + item.title + "》。" + syncMessage(state),state === "failed");
     });
   }
   editor.addEventListener("submit",event=>{
     event.preventDefault();
     run(async()=>{
-      const values = new URLSearchParams({id:editing});
+      const values = new URLSearchParams(editing);
       for (const key of ["title","edition","course","credit","kind","topics"]) values.set(key,field(editor,key).value);
       values.set("featured",field(editor,"featured").checked ? "1" : "0");
       const file = field(editor,"pdf").files[0];
@@ -156,23 +156,34 @@
   form.addEventListener("submit", event => {
     event.preventDefault();
     run(async()=>{
-      const selected = [...field(form,"pdf").files];
+      const input = field(form,"pdf");
+      const selected = [...input.files];
+      const metadata = new URLSearchParams({featured:field(form,"featured").checked ? "1" : "0"});
+      for (const key of ["edition","course","kind","credit","topics"]) metadata.set(key,field(form,key).value);
+      const fields = form.querySelectorAll("input,select");
+      for (const control of fields) control.disabled = true;
       let completed=0;
+      let status = "";
       let state;
-      for (const file of selected) {
-        const note = file.size > 25 * 1024 * 1024 ? "。正在处理大文件，请保持此页面打开。" : "";
-        message("正在上传 " + (completed+1) + "/" + selected.length + " · " + file.name + note);
-        const values = new URLSearchParams({
-          name:file.name, edition:field(form,"edition").value, course:field(form,"course").value,
-          kind:field(form,"kind").value, credit:field(form,"credit").value, topics:field(form,"topics").value,
-          featured:field(form,"featured").checked ? "1" : "0"
-        });
-        try { state=await request("upload?" + values,file,"application/pdf"); }
-        catch (error) { throw new Error("已收录 " + completed + " 份。" + file.name + " · " + error.message); }
-        completed++;
+      try {
+        for (const file of selected) {
+          const note = file.size > 25 * 1024 * 1024 ? "。正在处理大文件，请保持此页面打开。" : "";
+          message("正在上传 " + (completed+1) + "/" + selected.length + " · " + file.name + note);
+          metadata.set("name",file.name);
+          state = await request("upload?" + metadata,file,"application/pdf");
+          status = syncMessage(state);
+          completed++;
+        }
+        input.value = "";
+        message("已收录 " + completed + " 份。" + status,state === "failed");
+      } catch (error) {
+        const remaining = new DataTransfer();
+        for (const file of selected.slice(completed)) remaining.items.add(file);
+        input.files = remaining.files;
+        message("已收录 " + completed + " 份。" + status + "上传在「" + selected[completed].name + "」处中止。" + error.message,true);
+      } finally {
+        for (const control of fields) control.disabled = false;
       }
-      field(form,"pdf").value="";
-      message("已收录 " + completed + " 份。" + syncMessage(state),state === "failed");
     });
   });
   field(category,"type").addEventListener("change",()=>{

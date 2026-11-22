@@ -21,8 +21,13 @@ function assertValid(data) {
 export async function writeLibrary(data) {
   assertValid(data);
   const temporary = indexFile + "." + randomUUID() + ".tmp";
-  await writeFile(temporary, catalog.serialize(data), "utf8");
-  await rename(temporary, indexFile);
+  try {
+    await writeFile(temporary, catalog.serialize(data), "utf8");
+    await rename(temporary, indexFile);
+  } catch (error) {
+    await unlink(temporary).catch(cleanup=>{ if (cleanup.code !== "ENOENT") console.error("清理临时目录文件失败：",cleanup.code); });
+    throw error;
+  }
 }
 
 export function requirePDF(bytes) {
@@ -80,10 +85,14 @@ export async function updateNote(data, old, next, pdf) {
     }
     await writeLibrary(updatedData);
   } catch (error) {
-    if (targetWritten) await unlink(target);
-    if (transferred) await rename(backup,source);
-    await rmdir(backupDirectory);
-    if (error.code === "EEXIST") throw new Error("目标位置已有同名 PDF，原资料已保留。");
+    if (targetWritten) await unlink(target).catch(cleanup=>console.error("清理未收录的 PDF 失败：",cleanup.code));
+    try {
+      if (transferred) await rename(backup,source);
+      await rmdir(backupDirectory);
+    } catch (rollback) {
+      console.error("恢复 PDF 失败，备份目录：",backupDirectory,rollback.code);
+    }
+    if (error.code === "EEXIST") throw new Error("目标位置已有同名 PDF。");
     throw error;
   }
   try {

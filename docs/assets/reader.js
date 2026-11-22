@@ -8,11 +8,18 @@
   const state = $("reader-status");
   const pageField = $("page-number");
   const original = $("original");
-  const note = new URLSearchParams(location.search).get("note");
+  const query = new URLSearchParams(location.search);
+  const note = query.get("note");
+  const library = new URL("./index.html#library",location.href);
+  for (const key of ["term","q","edition","featured"]) {
+    if (query.has(key)) library.searchParams.set(key,query.get(key));
+  }
+  const back = $("back-to-library");
+  if (back) back.href = library.href;
   const catalog = window.XinhuoCatalog;
   const stamp = String(Math.floor(Date.now()/60000));
   const fresh = async path => {
-    const result = await fetch(path+"?v="+stamp,{cache:"no-cache"});
+    const result = await fetch(path+"?v="+stamp,{cache:"no-cache",signal:AbortSignal.timeout?.(20000)});
     if (!result.ok) throw new Error("HTTP " + result.status);
     return result;
   };
@@ -68,7 +75,8 @@
     retry.hidden = true;
     const img = new Image();
     img.alt = label.textContent;
-    const [width,height] = metadata.sizes?.[page-1] || [1188,1680];
+    const size = metadata.sizes?.[page-1];
+    const [width,height] = Array.isArray(size) && size.length === 2 && size.every(value=>Number.isSafeInteger(value) && value > 0) ? size : [1188,1680];
     img.width = width;
     img.height = height;
     img.loading = page === 1 ? "eager" : "lazy";
@@ -108,9 +116,12 @@
     requestAnimationFrame(updatePage);
   }
   function go(value) {
-    if (!Number.isInteger(value) || !pages[value-1]) return;
-    pageField.blur();
-    pages[value-1].scrollIntoView({block:"start",behavior:"instant"});
+    const section = pages[value-1];
+    if (!section) return;
+    const heading = section.querySelector("h2");
+    heading.tabIndex = -1;
+    heading.focus({preventScroll:true});
+    window.scrollBy({top:section.getBoundingClientRect().top - toolbar.offsetHeight - 12,behavior:"instant"});
     updatePage();
   }
   $("jump-page").addEventListener("submit",event=>{

@@ -1,8 +1,8 @@
 import { createServer } from "node:http";
-import { readFile, mkdir, writeFile, unlink, mkdtemp, open, rmdir } from "node:fs/promises";
+import { readFile, mkdir, unlink, mkdtemp, open, rmdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve, extname, sep, join } from "node:path";
-import { randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
+import { createHash, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirectory, requirePDF, isoDate, updateNote } from "./library.mjs";
@@ -87,7 +87,10 @@ function details(query) {
 async function withPDF(request,repository,action) {
   const limit = repository ? maxPDF : maxLocalPDF;
   const limitMessage = repository ? "单个 PDF 最大为 512 MiB。" : "超过 25 MiB 的 PDF 需要连接正式站后上传。";
-  if (Number(request.headers["content-length"]) > limit) throw new Error(limitMessage);
+  if (Number(request.headers["content-length"]) > limit) {
+    request.resume();
+    throw new Error(limitMessage);
+  }
   const directory = await mkdtemp(join(tmpdir(),"xinhuo-pdf-"));
   const path = join(directory,"upload.pdf");
   try {
@@ -156,27 +159,28 @@ async function upload(request, url, repository) {
       });
     }
     await mkdir(directory, {recursive:true});
-    try {
-      await writeFile(path,await readFile(pdf.path),{flag:"wx"});
-    } catch (error) {
+    const handle = await open(path,"wx").catch(error=>{
       if (error.code === "EEXIST") throw new Error("这门课已收录同名文件，请选择其他文件。");
       throw error;
-    }
+    });
     try {
+      try { await handle.writeFile(await readFile(pdf.path)); }
+      finally { await handle.close(); }
       return await rebuildIndex({...data,resources:[...data.resources,resource]});
     } catch (error) {
-      await unlink(path);
+      await unlink(path).catch(cleanup=>console.error("清理未收录的 PDF 失败：",cleanup.code));
       throw error;
     }
   });
 }
 
-async function editOrDelete(request,url,repository) {
+async function editOrDelete(request,url,repository,action) {
   const data = await readLibrary();
   const query = url.searchParams;
   const old = data.resources.find(item => item.id === query.get("id"));
   if (!old) throw new Error("资料已变更或删除，请刷新管理页。");
-  if (url.pathname.endsWith("/delete")) return updateNote(data,old,null,null);
+  if (query.get("version") !== noteVersion(old)) throw new Error("这份资料已在其他页面更新，请刷新管理页后重试。");
+  if (action === "delete") return updateNote(data,old,null,null);
   const edition = query.get("edition");
   const course = query.get("course");
   const featured = query.get("featured") === "1";
@@ -217,9 +221,16 @@ async function addCategory(request) {
 function json(response, code, data) {
   response.writeHead(code, {"Content-Type":"application/json; charset=utf-8"}).end(JSON.stringify(data));
 }
+function noteVersion(note) {
+  const fields = Object.entries(note).sort(([a],[b])=>a.localeCompare(b));
+  return createHash("sha256").update(JSON.stringify(fields)).digest("hex");
+}
+function adminLibrary(data) {
+  return {...data,resources:data.resources.map(note=>({...note,version:noteVersion(note)}))};
+}
 async function staticFile(response, urlPath) {
   let base = docs;
-  let relative = urlPath === "/" ? "index.html" : decodeURIComponent(urlPath.slice(1));
+  let relative = urlPath === "/" ? "index.html" : urlPath.slice(1);
   if (["admin/","admin/index.html","admin/editor.js"].includes(relative)) {
     base = join(root,"tools");
     relative = relative.endsWith("editor.js") ? "editor.js" : "editor.html";
@@ -248,23 +259,24 @@ const server = createServer(async (request,response) => {
     if (request.headers.host !== new URL(origin).host) return response.writeHead(403).end();
     const url = new URL(request.url, origin);
     if (url.origin !== origin) return response.writeHead(403).end();
-    const privatePage = url.pathname.startsWith("/admin/");
+    const pathname = decodeURIComponent(url.pathname);
+    const privatePage = pathname.startsWith("/admin/");
     if (privatePage && !authorized(request.headers.authorization)) {
       response.setHeader("WWW-Authenticate",'Basic realm="Xinhuo Notes", charset="UTF-8"');
       return response.writeHead(401).end("Administrator login required");
     }
-    if (request.method === "GET" && url.pathname === "/admin/api/library") return json(response,200,{data:await readLibrary(), repository:await publishingRepository()});
-    if (request.method === "GET") return await staticFile(response,url.pathname);
-    const action = url.pathname.slice("/admin/api/".length);
+    if (request.method === "GET" && pathname === "/admin/api/library") return json(response,200,{data:adminLibrary(await readLibrary()), repository:await publishingRepository()});
+    if (request.method === "GET") return await staticFile(response,pathname);
+    const action = pathname.slice("/admin/api/".length);
     const actions = {upload, category:addCategory, edit:editOrDelete, delete:editOrDelete, publish:readLibrary};
-    if (request.method !== "POST" || !url.pathname.startsWith("/admin/api/") || !Object.hasOwn(actions,action)) return response.writeHead(404).end();
+    if (request.method !== "POST" || !pathname.startsWith("/admin/api/") || !Object.hasOwn(actions,action)) return response.writeHead(404).end();
     if (request.headers.origin !== origin || request.headers["x-xinhuo-editor"] !== "1") return response.writeHead(403).end();
     if (busy) return json(response,409,{message:"有一项更新正在处理，请稍后重试。"});
     busy = true;
     try {
       const repository = await publishingRepository();
-      const data = await actions[action](request,url,repository);
-      json(response,200,{data, repository, publish:await sync(repository)});
+      const data = await actions[action](request,url,repository,action);
+      json(response,200,{data:adminLibrary(data), repository, publish:await sync(repository)});
     } finally { busy = false; }
   } catch (error) {
     json(response,400,{message:error.message});
