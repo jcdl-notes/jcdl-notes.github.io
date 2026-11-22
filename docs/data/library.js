@@ -134,6 +134,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/2022年工程数学(3.5学分)(A)(22.12.11)).pdf"
     },
     {
+      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
+      "title": "王帅工程数学3.5历年试卷及答案",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/engineering-math/featured/王帅工程数学3.5历年试卷及答案.pdf"
+    },
+    {
       "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
       "title": "《固态电子器件》重要基础英文术语",
       "course": "semiconductor",
