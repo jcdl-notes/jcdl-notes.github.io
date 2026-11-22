@@ -95,6 +95,21 @@ window.XINHUO_LIBRARY = {
   ],
   "resources": [
     {
+      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
+      "title": "半导体超级题库_20261119152723",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
+    },
+    {
       "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
       "title": "半导体习题",
       "kind": "习题整理",
