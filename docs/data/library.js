@@ -110,6 +110,21 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
     },
     {
+      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
+      "title": "半导体技术基础【判断题】(2分)",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-22",
+      "file": "files/2026-fall/semiconductor/featured/半导体技术基础【判断题】(2分).pdf"
+    },
+    {
       "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
       "title": "半导体习题",
       "kind": "习题整理",
