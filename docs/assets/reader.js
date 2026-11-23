@@ -42,10 +42,11 @@
     const source = catalog.fileURL(resource.file);
     if (source) {
       original.href = source.local && resource.revision ? source.href+"?v="+encodeURIComponent(resource.revision) : source.href;
+      original.dataset.downloadNote = resource.id;
       if (source.local) original.download = resource.title + ".pdf";
       original.hidden = false;
       if (location.origin === "https://jcdl-notes.github.io") {
-        setTimeout(() => import("./traffic.js?v=1").then(module => module.recordVisit()).catch(() => {}), 1000);
+        import("./traffic.js?v=2").then(module => module.startTraffic()).catch(() => {});
       }
     }
     metadata = (await previewIndex)?.[note];

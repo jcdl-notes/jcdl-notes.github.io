@@ -182,6 +182,7 @@
         const label = link.local ? "下载 PDF ↓" : "下载 PDF（" + (resource.bytes / 1e6).toFixed(0) + " MB）↓";
         const download = make("a",label,"action");
         download.href = href;
+        download.dataset.downloadNote = resource.id;
         if (link.local) download.download = resource.title + ".pdf";
         actions.append(download);
       }
@@ -192,6 +193,6 @@
   }
   render();
   if (location.origin === "https://jcdl-notes.github.io") {
-    setTimeout(() => import("./traffic.js?v=1").then(module => module.recordVisit()).catch(() => {}), 1000);
+    import("./traffic.js?v=2").then(module => module.startTraffic()).catch(() => {});
   }
 })();

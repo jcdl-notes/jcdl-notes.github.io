@@ -6,7 +6,7 @@ import { credentialPath } from "./admin-settings.mjs";
 function fetchThroughProxy(url, key, proxy) {
   const curl = process.platform === "win32" ? join(process.env.SystemRoot || "C:\\Windows", "System32", "curl.exe") : "curl";
   return new Promise((resolve, reject) => {
-    const child = spawn(curl, ["-q", "--silent", "--fail", "--max-time", "7", "--max-filesize", "4096",
+    const child = spawn(curl, ["-q", "--silent", "--fail", "--max-time", "7", "--max-filesize", "1048576",
       "--proxy", proxy, "--header", "@-", url.href], {windowsHide:true, stdio:["pipe", "pipe", "ignore"]});
     let output = "";
     child.stdout.setEncoding("utf8").on("data", chunk => { output += chunk; });
@@ -40,10 +40,10 @@ export async function trafficStats(proxy) {
       if (!result.ok) return {state: "unavailable"};
       data = await result.json();
     }
-    const {today, total} = data;
+    const {today, total, downloads} = data;
     const numbers = [today?.views, today?.visitors, total?.views, total?.visitors];
     if (numbers.some(value => !Number.isSafeInteger(value) || value < 0)) return {state: "unavailable"};
-    return {state: "ready", today, total};
+    return {state: "ready", today, total, downloads};
   } catch {
     return {state: "unavailable"};
   }

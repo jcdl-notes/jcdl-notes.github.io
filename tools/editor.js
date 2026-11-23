@@ -13,6 +13,7 @@
   const field = (owner,name) => owner.elements.namedItem(name);
   let data;
   let repository;
+  let downloadCounts;
   let busy = false;
   let editing;
   function message(value, error = false) {
@@ -53,7 +54,8 @@
       title.textContent = item.title;
       const meta = document.createElement("small");
       meta.textContent = [courseNames.get(item.course),editionNames.get(item.edition),item.kind,
-        ...(item.featured ? ["优秀"] : []),item.credit,item.updated].filter(Boolean).join(" · ");
+        ...(item.featured ? ["优秀"] : []),item.credit,item.updated,
+        downloadCounts ? "下载 " + (downloadCounts.get(item.id) ?? 0).toLocaleString("zh-CN") + " 次" : ""].filter(Boolean).join(" · ");
       info.append(title,meta);
       const actions = document.createElement("div");
       actions.className = "entry-actions";
@@ -286,7 +288,11 @@
         }
       }
       summary.hidden = false;
-      status.textContent = "北京时间 · 访客人数按浏览器去重。";
+      if (stats.downloads) {
+        downloadCounts = new Map(Object.entries(stats.downloads));
+        if (data) drawEntries();
+      }
+      status.textContent = "北京时间 · 访客按浏览器去重 · 下载按按钮点击统计。";
     } catch {
       status.textContent = "暂时无法读取访问统计，请稍后刷新。";
     } finally {
