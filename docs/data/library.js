@@ -233,21 +233,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/featured/《固态电子器件》重要基础英文术语.pdf"
     },
     {
-      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
-      "title": "半导体超级题库_20261119152723",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-22",
-      "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
-    },
-    {
       "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
       "title": "半导体技术基础【判断题】(2分)",
       "course": "semiconductor",
@@ -321,6 +306,21 @@ window.XINHUO_LIBRARY = {
       "filename": "半导体错题 1.pdf",
       "bytes": 162650916,
       "assetId": 770603680
+    },
+    {
+      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
+      "title": "半导体题库2",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
     }
   ]
 };
