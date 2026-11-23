@@ -24,7 +24,8 @@ window.XINHUO_LIBRARY = {
       "id": "engineering-drawing",
       "term": "y1-fall",
       "name": "图学基础与计算机绘图（工程制图）",
-      "mark": "图"
+      "mark": "图",
+      "archived": true
     },
     {
       "id": "college-computing",
