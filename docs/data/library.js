@@ -162,6 +162,21 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/2022年工程数学(3.5学分)(A)(22.12.11)).pdf"
     },
     {
+      "id": "note-d194a05c-8b9e-421f-9aa3-81fc8601433b",
+      "title": "复变函数的求导",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "专题笔记",
+      "featured": true,
+      "credit": "宁志宇",
+      "summary": "",
+      "topics": [
+        "复变函数的求导"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/engineering-math/featured/复变函数的求导.pdf"
+    },
+    {
       "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
       "title": "王帅工程数学3.5历年试卷及答案",
       "course": "engineering-math",
