@@ -31,7 +31,8 @@ window.XINHUO_LIBRARY = {
       "id": "college-computing",
       "term": "y1-fall",
       "name": "大学计算机",
-      "mark": "计"
+      "mark": "计",
+      "archived": true
     },
     {
       "id": "cpp",
