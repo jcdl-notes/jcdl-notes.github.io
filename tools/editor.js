@@ -263,5 +263,37 @@
     const state=await request("publish","", "text/plain");
     message(syncMessage(state),state === "failed");
   }));
+  let loadingTraffic = false;
+  async function refreshTraffic() {
+    if (loadingTraffic) return;
+    loadingTraffic = true;
+    const status = $("traffic-status");
+    const summary = $("traffic-summary");
+    status.textContent = "正在读取统计…";
+    try {
+      const response = await fetch("/admin/api/traffic", {cache:"no-store"});
+      if (!response.ok) throw new Error("traffic unavailable");
+      const stats = await response.json();
+      if (stats.state === "unconfigured") {
+        summary.hidden = true;
+        status.textContent = "访问统计尚未启用。";
+        return;
+      }
+      if (stats.state !== "ready") throw new Error("traffic unavailable");
+      for (const period of ["today", "total"]) {
+        for (const metric of ["views", "visitors"]) {
+          $("traffic-" + period + "-" + metric).textContent = stats[period][metric].toLocaleString("zh-CN");
+        }
+      }
+      summary.hidden = false;
+      status.textContent = "北京时间 · 访客人数按浏览器去重。";
+    } catch {
+      status.textContent = "暂时无法读取访问统计，请稍后刷新。";
+    } finally {
+      loadingTraffic = false;
+    }
+  }
+  $("refresh-traffic").addEventListener("click",refreshTraffic);
+  refreshTraffic();
   request("library").catch(error=>message(error.message,true));
 })();

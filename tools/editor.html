@@ -6,7 +6,7 @@
   <title>芯火相传 · 资料管理端</title>
   <link rel="stylesheet" href="../assets/site.css">
   <script defer src="../assets/catalog.js?v=large-pdfs"></script>
-  <script defer src="editor.js?v=course-name"></script>
+  <script defer src="editor.js?v=traffic-stats"></script>
 </head>
 <body>
 <header class="top"><div class="wrap top-row">
@@ -20,6 +20,17 @@
   <h1>上传复习资料</h1>
   <div class="publish-panel"><p id="sync-status" aria-live="polite"></p><a id="deployments" href="https://github.com/jcdl-notes/jcdl-notes.github.io/actions" target="_blank" rel="noopener">查看发布进度 ↗</a><button id="retry" class="action" type="button" hidden>重试发布</button></div>
   <p id="edit-status" role="status"></p>
+  <section class="editor-box" aria-labelledby="traffic-title">
+    <div class="admin-list-head">
+      <h2 id="traffic-title">学生端访问统计</h2>
+      <button type="button" class="action" id="refresh-traffic">刷新统计</button>
+    </div>
+    <p id="traffic-status" role="status">正在读取统计…</p>
+    <div class="editor-fields" id="traffic-summary" hidden>
+      <div><strong>今日</strong><p>访问次数 <b id="traffic-today-views"></b> · 访客人数 <b id="traffic-today-visitors"></b></p></div>
+      <div><strong>启用以来</strong><p>访问次数 <b id="traffic-total-views"></b> · 访客人数 <b id="traffic-total-visitors"></b></p></div>
+    </div>
+  </section>
   <form id="upload" class="editor-box">
     <div class="editor-fields">
       <label>届次<select name="edition" required></select></label>

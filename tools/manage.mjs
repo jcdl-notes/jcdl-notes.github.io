@@ -9,6 +9,7 @@ import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirec
 import { releaseStorage } from "./releases.mjs";
 
 import { credentialPath } from "./admin-settings.mjs";
+import { trafficStats } from "./traffic.mjs";
 
 const { username, salt, passwordHash, gitBinary } = JSON.parse(await readFile(credentialPath, "utf8"));
 const credentials = Buffer.from(passwordHash, "hex");
@@ -274,6 +275,11 @@ const server = createServer(async (request,response) => {
       return response.writeHead(401).end("Administrator login required");
     }
     if (request.method === "GET" && pathname === "/admin/api/library") return json(response,200,{data:adminLibrary(await readLibrary()), repository:await publishingRepository()});
+    if (request.method === "GET" && pathname === "/admin/api/traffic") {
+      const proxy = await git("config","--get","remote.origin.proxy").catch(()=>null) ||
+        await git("config","--get","http.proxy").catch(()=>null);
+      return json(response,200,await trafficStats(proxy));
+    }
     if (request.method === "GET") return await staticFile(response,pathname);
     const action = pathname.slice("/admin/api/".length);
     const actions = {upload, category:addCategory, course:changeCourse, edit:editOrDelete, delete:editOrDelete, publish:readLibrary};

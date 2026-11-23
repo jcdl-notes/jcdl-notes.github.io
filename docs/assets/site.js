@@ -191,4 +191,7 @@
     $("course-dialog").showModal();
   }
   render();
+  if (location.origin === "https://jcdl-notes.github.io") {
+    setTimeout(() => import("./traffic.js?v=1").then(module => module.recordVisit()).catch(() => {}), 1000);
+  }
 })();

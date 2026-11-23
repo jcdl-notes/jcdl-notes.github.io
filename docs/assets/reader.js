@@ -44,6 +44,9 @@
       original.href = source.local && resource.revision ? source.href+"?v="+encodeURIComponent(resource.revision) : source.href;
       if (source.local) original.download = resource.title + ".pdf";
       original.hidden = false;
+      if (location.origin === "https://jcdl-notes.github.io") {
+        setTimeout(() => import("./traffic.js?v=1").then(module => module.recordVisit()).catch(() => {}), 1000);
+      }
     }
     metadata = (await previewIndex)?.[note];
     if (!metadata || !/^[a-f0-9]{24}$/.test(metadata.key)
