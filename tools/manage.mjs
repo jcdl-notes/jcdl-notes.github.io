@@ -219,11 +219,11 @@ async function addCategory(request) {
 }
 
 async function changeCourse(request) {
-  const {id, action} = JSON.parse((await bodyBytes(request,8192)).toString("utf8")) ?? {};
-  if (typeof id !== "string" || !filenamePattern.test(id) || !["archive","restore","delete"].includes(action)) {
+  const {id, action, name, previousName} = JSON.parse((await bodyBytes(request,8192)).toString("utf8")) ?? {};
+  if (typeof id !== "string" || !filenamePattern.test(id) || !["archive","restore","delete","rename"].includes(action)) {
     throw new Error("请选择有效的课程和操作。");
   }
-  return updateCourse(await readLibrary(),id,action);
+  return updateCourse(await readLibrary(),id,action,clean(name,80),previousName);
 }
 
 function json(response, code, data) {

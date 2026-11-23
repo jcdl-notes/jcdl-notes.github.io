@@ -120,7 +120,7 @@ async function courseHasPDFs(data, id) {
   return false;
 }
 
-export async function updateCourse(data, id, action) {
+export async function updateCourse(data, id, action, name, previousName) {
   assertValid(data);
   const course = data.courses.find(item => item.id === id);
   if (!course) {
@@ -139,6 +139,14 @@ export async function updateCourse(data, id, action) {
   } else if (action === "restore") {
     if (!Object.hasOwn(course, "archived")) return data;
     delete course.archived;
+  } else if (action === "rename") {
+    if (!name) throw new Error("请填写课程名称。");
+    if (course.name === name) return data;
+    if (course.name !== previousName) throw new Error("课程名称已在其他页面修改，请刷新管理页后重试。");
+    if (data.courses.some(item => item.id !== id && item.term === course.term && item.name === name)) {
+      throw new Error("该学期已有同名课程。");
+    }
+    course.name = name;
   } else {
     throw new Error("无效的课程操作。");
   }

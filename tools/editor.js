@@ -4,6 +4,7 @@
   const form = $("upload");
   const category = $("category");
   const coursePicker = $("manage-course");
+  const courseName = $("course-name");
   const visibilityButton = $("course-visibility");
   const deleteCourseButton = $("course-delete");
   const editor = $("edit-form");
@@ -98,6 +99,9 @@
   function drawCourseManagement() {
     const course = data?.courses.find(item=>item.id === coursePicker.value);
     const count = course ? data.resources.filter(note=>note.course === course.id).length : 0;
+    courseName.value = course?.name || "";
+    $("course-name-field").hidden = !course;
+    $("course-rename").hidden = !course;
     visibilityButton.hidden = !course;
     deleteCourseButton.hidden = !course || count > 0;
     if (!course) {
@@ -215,20 +219,30 @@
       message("已添加“" + values.label.trim() + "”。" + syncMessage(state),state === "failed");
     });
   });
-  function changeCourse(remove = false) {
+  function changeCourse(action) {
     const course = data?.courses.find(item=>item.id === coursePicker.value);
     if (busy || !course) return;
-    const action = remove ? "delete" : course.archived ? "restore" : "archive";
-    const label = {delete:"删除课程",restore:"恢复上架",archive:"下架课程"}[action];
-    const detail = action === "archive" ? "学生端将隐藏本课程，资料可在管理端继续管理。" : "";
-    if (!confirm(label + "「" + course.name + "」？" + detail)) return;
+    const values = {id:course.id,action:action || (course.archived ? "restore" : "archive")};
     const status = $("course-operation-status");
+    if (action === "rename") {
+      values.name = courseName.value.trim();
+      values.previousName = course.name;
+      if (!values.name || values.name === course.name) {
+        status.textContent = values.name ? "课程名称没有变化。" : "请填写课程名称。";
+        status.classList.toggle("error",!values.name);
+        return;
+      }
+    } else {
+      const label = {delete:"删除课程",restore:"恢复上架",archive:"下架课程"}[values.action];
+      const detail = values.action === "archive" ? "学生端将隐藏本课程，资料可在管理端继续管理。" : "";
+      if (!confirm(label + "「" + course.name + "」？" + detail)) return;
+    }
     status.classList.remove("error");
     status.textContent = "正在保存…";
     run(async()=>{
-      const state = await request("course",JSON.stringify({id:course.id,action}),"application/json");
-      const result = {delete:"已删除课程",restore:"已恢复上架",archive:"已下架课程"}[action];
-      status.textContent = result + "「" + course.name + "」。" + syncMessage(state);
+      const state = await request("course",JSON.stringify(values),"application/json");
+      const result = {delete:"已删除课程",restore:"已恢复上架",archive:"已下架课程",rename:"课程已改名为"}[values.action];
+      status.textContent = result + "「" + (values.name || course.name) + "」。" + syncMessage(state);
       status.classList.toggle("error",state === "failed");
     },error=>{
       status.textContent = error.message;
@@ -239,8 +253,12 @@
     $("course-operation-status").textContent = "";
     drawCourseManagement();
   });
+  $("course-management").addEventListener("submit",event=>{
+    event.preventDefault();
+    changeCourse("rename");
+  });
   visibilityButton.addEventListener("click",()=>changeCourse());
-  deleteCourseButton.addEventListener("click",()=>changeCourse(true));
+  deleteCourseButton.addEventListener("click",()=>changeCourse("delete"));
   $("retry").addEventListener("click",()=>run(async()=>{
     const state=await request("publish","", "text/plain");
     message(syncMessage(state),state === "failed");
