@@ -153,7 +153,7 @@
         const label = make("span",null,"featured-note");
         const star = make("span","★");
         star.setAttribute("aria-hidden","true");
-        label.append(star," 优秀笔记");
+        label.append(star," 优秀");
         meta.append(label," · ");
       }
       meta.append(resource.kind);
