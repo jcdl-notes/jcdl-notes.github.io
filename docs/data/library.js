@@ -175,6 +175,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/王帅工程数学3.5历年试卷及答案.pdf"
     },
     {
+      "id": "note-bd3b651a-4e76-4b81-8961-a925afe49108",
+      "title": "积分变换练习",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王宇航",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/engineering-math/general/积分变换练习.pdf"
+    },
+    {
       "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
       "title": "《固态电子器件》重要基础英文术语",
       "course": "semiconductor",
@@ -248,22 +261,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记供参考.pdf"
     },
     {
-      "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
-      "title": "半导体习题",
-      "kind": "习题整理",
-      "credit": "沈明慧",
-      "topics": [],
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "featured": false,
-      "summary": "",
-      "updated": "2026-11-22",
-      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/semiconductor-c60d7007-f053-443c-8c78-2f5300b2c317.pdf",
-      "filename": "半导体错题 1.pdf",
-      "bytes": 162650916,
-      "assetId": 770603680
-    },
-    {
       "id": "note-5ce6ec0c-3a00-426d-958a-dcec96e8320b",
       "title": "工程数学",
       "kind": "完整笔记",
@@ -278,6 +275,22 @@ window.XINHUO_LIBRARY = {
       "filename": "工程数学.pdf",
       "bytes": 81043765,
       "assetId": 781464521
+    },
+    {
+      "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
+      "title": "半导体习题",
+      "kind": "习题整理",
+      "credit": "沈明慧",
+      "topics": [],
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "featured": false,
+      "summary": "",
+      "updated": "2026-11-22",
+      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/semiconductor-c60d7007-f053-443c-8c78-2f5300b2c317.pdf",
+      "filename": "半导体错题 1.pdf",
+      "bytes": 162650916,
+      "assetId": 770603680
     }
   ]
 };
