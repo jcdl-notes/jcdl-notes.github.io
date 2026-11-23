@@ -262,6 +262,22 @@ window.XINHUO_LIBRARY = {
       "filename": "半导体错题 1.pdf",
       "bytes": 162650916,
       "assetId": 770603680
+    },
+    {
+      "id": "note-5ce6ec0c-3a00-426d-958a-dcec96e8320b",
+      "title": "工程数学",
+      "kind": "完整笔记",
+      "credit": "张毅",
+      "topics": [],
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "featured": true,
+      "summary": "",
+      "updated": "2026-11-23",
+      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/engineering-math-b80f0763-e717-4ff5-a558-e1d227b925f8.pdf",
+      "filename": "工程数学.pdf",
+      "bytes": 81043765,
+      "assetId": 781464521
     }
   ]
 };
