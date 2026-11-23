@@ -309,7 +309,7 @@ window.XINHUO_LIBRARY = {
     },
     {
       "id": "note-8e16d84a-4ae8-4261-8091-3a1c4a869fb7",
-      "title": "半导体题库1",
+      "title": "半导体习题1",
       "course": "semiconductor",
       "edition": "2026-fall",
       "kind": "习题整理",
