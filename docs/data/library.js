@@ -203,21 +203,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/general/积分变换练习.pdf"
     },
     {
-      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
-      "title": "《固态电子器件》重要基础英文术语",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-22",
-      "file": "files/2026-fall/semiconductor/featured/《固态电子器件》重要基础英文术语.pdf"
-    },
-    {
       "id": "note-c9c52ed1-66e8-4b50-beee-aa8372a71bc2",
       "title": "半导体技术基础笔记供参考",
       "course": "semiconductor",
@@ -321,6 +306,21 @@ window.XINHUO_LIBRARY = {
       ],
       "updated": "2026-11-23",
       "file": "files/2026-fall/semiconductor/featured/半导体技术基础【判断题】(2分).pdf"
+    },
+    {
+      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
+      "title": "半导体技术基础重要英文术语",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/semiconductor/featured/《固态电子器件》重要基础英文术语.pdf"
     }
   ]
 };
