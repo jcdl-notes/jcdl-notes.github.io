@@ -110,6 +110,21 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/circuits/featured/《电路》必会大题.pdf"
     },
     {
+      "id": "note-20a7acbe-d4f1-45f0-9fd4-f0d899b257bf",
+      "title": "电路23.24.25年题",
+      "course": "circuits",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "",
+      "summary": "",
+      "topics": [
+        "23.24.25年期末题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/circuits/featured/电路历年题.pdf"
+    },
+    {
       "id": "note-2434a115-dfc9-49c0-bcb5-91799f4d3c3b",
       "title": "C＋＋赛",
       "course": "cpp",
@@ -177,6 +192,19 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/复变函数的求导.pdf"
     },
     {
+      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
+      "title": "工程数学18-24年试卷及答案",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/engineering-math/featured/王帅工程数学3.5历年试卷及答案.pdf"
+    },
+    {
       "id": "note-bd3b651a-4e76-4b81-8961-a925afe49108",
       "title": "积分变换练习",
       "course": "engineering-math",
@@ -188,6 +216,81 @@ window.XINHUO_LIBRARY = {
       "topics": [],
       "updated": "2026-11-23",
       "file": "files/2026-fall/engineering-math/general/积分变换练习.pdf"
+    },
+    {
+      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
+      "title": "半导体技术基础重要英文术语",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/semiconductor/featured/《固态电子器件》重要基础英文术语.pdf"
+    },
+    {
+      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
+      "title": "半导体习题2",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
+    },
+    {
+      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
+      "title": "半导体判断题",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/semiconductor/featured/半导体技术基础【判断题】(2分).pdf"
+    },
+    {
+      "id": "note-8e16d84a-4ae8-4261-8091-3a1c4a869fb7",
+      "title": "半导体习题1",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-23",
+      "file": "files/2026-fall/semiconductor/featured/半导体题目.pdf"
+    },
+    {
+      "id": "note-50b66639-e374-4a7f-9895-8dcf00501af3",
+      "title": "考前必看",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "",
+      "summary": "",
+      "topics": [
+        "部分真题回忆"
+      ],
+      "updated": "2026-11-24",
+      "file": "files/2026-fall/semiconductor/featured/考前必看.pdf"
     },
     {
       "id": "note-c9c52ed1-66e8-4b50-beee-aa8372a71bc2",
@@ -233,94 +336,6 @@ window.XINHUO_LIBRARY = {
       "filename": "半导体错题 1.pdf",
       "bytes": 162650916,
       "assetId": 770603680
-    },
-    {
-      "id": "note-8e16d84a-4ae8-4261-8091-3a1c4a869fb7",
-      "title": "半导体习题1",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/semiconductor/featured/半导体题目.pdf"
-    },
-    {
-      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
-      "title": "半导体习题2",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
-    },
-    {
-      "id": "note-20a7acbe-d4f1-45f0-9fd4-f0d899b257bf",
-      "title": "电路23.24.25年题",
-      "course": "circuits",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "",
-      "summary": "",
-      "topics": [
-        "23.24.25年期末题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/circuits/featured/电路历年题.pdf"
-    },
-    {
-      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
-      "title": "半导体判断题",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/semiconductor/featured/半导体技术基础【判断题】(2分).pdf"
-    },
-    {
-      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
-      "title": "半导体技术基础重要英文术语",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/semiconductor/featured/《固态电子器件》重要基础英文术语.pdf"
-    },
-    {
-      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
-      "title": "工程数学18-24年试卷及答案",
-      "course": "engineering-math",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/engineering-math/featured/王帅工程数学3.5历年试卷及答案.pdf"
     }
   ]
 };
