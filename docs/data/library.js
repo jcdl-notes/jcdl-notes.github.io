@@ -95,7 +95,8 @@ window.XINHUO_LIBRARY = {
       "id": "microprocessors",
       "term": "y3-fall",
       "name": "微处理器原理与应用",
-      "mark": "微"
+      "mark": "微",
+      "archived": true
     }
   ],
   "resources": [
