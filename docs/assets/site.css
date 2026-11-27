@@ -347,6 +347,10 @@ h2 {
   font-size: 19px
 }
 
+.filter-feature[aria-pressed=true] span {
+  color: #b42332
+}
+
 .toolbar {
   display: flex;
   gap: 10px;
@@ -487,6 +491,46 @@ dialog {
 
 dialog::backdrop {
   background: #172745aa
+}
+
+.course-dialog {
+  --course-dialog-padding: 27px;
+  max-height: 85dvh;
+  overflow: hidden
+}
+
+.course-dialog[open] {
+  display: flex;
+  flex-direction: column
+}
+
+.course-dialog-header {
+  position: relative;
+  flex: none;
+  padding: 20px var(--course-dialog-padding) 12px;
+  border-bottom: 1px solid var(--line)
+}
+
+.course-dialog-header h2 {
+  padding-right: 36px;
+  margin-bottom: 12px;
+  overflow-wrap: anywhere
+}
+
+.course-kinds button {
+  min-height: 36px;
+  border-color: var(--line);
+  background: white;
+  color: var(--blue);
+  font-size: 14px;
+  white-space: nowrap
+}
+
+.course-dialog > #course-files {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px var(--course-dialog-padding) 20px
 }
 
 .dialog-inner {
@@ -762,6 +806,9 @@ dialog::backdrop {
   }
   .dialog-inner {
     padding: 20px 16px
+  }
+  .course-dialog {
+    --course-dialog-padding: 16px
   }
   .editor-fields {
     grid-template-columns: 1fr

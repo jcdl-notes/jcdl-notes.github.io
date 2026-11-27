@@ -6,9 +6,9 @@
   <meta name="description" content="集成电路学院芯火相传学习笔记资料库，按课程查找、预览和下载复习资料。">
   <title>芯火相传 · 学习笔记资料库</title>
   <link rel="icon" href="assets/college-logo.jpg">
-  <link rel="stylesheet" href="assets/site.css?v=online-reader">
+  <link rel="stylesheet" href="assets/site.css?v=course-filters">
   <script defer src="assets/catalog.js?v=course-visibility"></script>
-  <script defer src="assets/site.js?v=download-stats"></script>
+  <script defer src="assets/site.js?v=course-filters"></script>
 </head>
 <body>
   <a class="skip" href="#library">跳到课程资料</a>
@@ -37,7 +37,7 @@
       <div class="controls">
         <label class="search"><span class="lens" aria-hidden="true"></span><span class="sr-only">搜索课程或资料</span><input id="search" type="search" placeholder="搜索课程、资料或知识点，例如 电路"></label>
         <label class="select"><span class="sr-only">资料届次</span><select id="edition"></select></label>
-        <button class="filter-feature" type="button" id="featured" aria-pressed="false"><span aria-hidden="true">☆</span> 只看优秀</button>
+        <button class="filter-feature" type="button" id="featured" aria-pressed="false"><span aria-hidden="true">☆</span> 只看标记</button>
       </div>
       <div class="toolbar">
         <div id="terms" class="tabs" role="group" aria-label="按课程学期筛选"></div>
@@ -48,10 +48,17 @@
     </section>
   </main>
   <footer class="footer"><div class="wrap"><span>芯火相传 · 笔记助学</span><span>集成电路学院（微电子学院）</span></div></footer>
-  <dialog id="course-dialog" aria-labelledby="course-title"><div class="dialog-inner">
-    <form method="dialog"><button class="close" aria-label="关闭课程资料">×</button></form>
-    <p id="course-term" class="section-kicker"></p><h2 id="course-title"></h2>
-    <div id="course-files"></div>
-  </div></dialog>
+  <dialog id="course-dialog" class="course-dialog" aria-labelledby="course-title">
+    <div class="course-dialog-header">
+      <form method="dialog"><button class="close" aria-label="关闭课程资料">×</button></form>
+      <p id="course-term" class="section-kicker"></p><h2 id="course-title"></h2>
+      <div id="course-kinds" class="tabs course-kinds" role="group" aria-label="筛选资料类别">
+        <button type="button" aria-pressed="false">完整笔记</button>
+        <button type="button" aria-pressed="false">专题笔记</button>
+        <button type="button" aria-pressed="false">习题整理</button>
+      </div>
+    </div>
+    <div id="course-files" tabindex="0" role="region" aria-label="课程资料列表"></div>
+  </dialog>
 </body>
 </html>

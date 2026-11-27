@@ -75,11 +75,16 @@
   const search = $("search");
   const edition = $("edition");
   const featured = $("featured");
+  const featuredStar = featured.querySelector("span");
+  const courseDialog = $("course-dialog");
+  const courseFiles = $("course-files");
+  const kindButtons = $("course-kinds")?.querySelectorAll("button") ?? [];
+  let courseResources = [];
   search.value = query.get("q") || "";
   edition.append(new Option("全部届次",""));
   for (const item of [...data.editions].reverse()) edition.append(new Option(item.label,item.id));
   if (editions.has(query.get("edition"))) edition.value = query.get("edition");
-  featured.setAttribute("aria-pressed", String(query.get("featured") === "1"));
+  setFeatured(query.get("featured") === "1");
 
   for (const [id,label] of [["","全部课程"], ...terms]) {
     const button = make("button",label);
@@ -89,10 +94,21 @@
     tabButtons.set(id,button);
   }
   for (const element of [search,edition]) element.addEventListener("input",render);
+  function setFeatured(pressed) {
+    featured.setAttribute("aria-pressed", String(pressed));
+    featuredStar.textContent = pressed ? "★" : "☆";
+  }
   featured.addEventListener("click", () => {
-    featured.setAttribute("aria-pressed", String(featured.getAttribute("aria-pressed") !== "true"));
+    setFeatured(featured.getAttribute("aria-pressed") !== "true");
     render();
   });
+  for (const button of kindButtons) {
+    button.addEventListener("click", () => {
+      const selected = button.getAttribute("aria-pressed") !== "true";
+      kindButtons.forEach(item => item.setAttribute("aria-pressed", String(selected && item === button)));
+      renderCourseFiles(selected ? button.textContent.trim() : "");
+    });
+  }
   function clean(value) { return value.normalize("NFKC").toLowerCase().replace(/\s+/g,""); }
   function matching(course, tokens) {
     const courseText = clean([course.name, terms.get(course.term)].join(" "));
@@ -127,7 +143,7 @@
       const name = make("span",course.name,"course-name");
       const foot = make("span",null,"card-foot");
       const stars = list.filter(item => item.featured).length;
-      foot.append(make("span",list.length ? list.length + " 份资料" + (stars ? " · " + stars + " 份优秀" : "") : "待收录"),make("span","↗","arrow"));
+      foot.append(make("span",list.length ? list.length + " 份资料" + (stars ? " · " + stars + " 份已标记" : "") : "待收录"),make("span","↗","arrow"));
       card.append(top,name,foot);
       card.addEventListener("click",() => openCourse(course,list));
       grid.append(card);
@@ -143,18 +159,26 @@
   function openCourse(course,list) {
     $("course-term").textContent = terms.get(course.term);
     $("course-title").textContent = course.name;
-    const files = $("course-files");
-    files.replaceChildren();
-    if (!list.length) files.append(make("p", "这门课暂未发布复习资料。","empty"));
+    courseResources = list;
+    kindButtons.forEach(button => button.setAttribute("aria-pressed", "false"));
+    renderCourseFiles();
+    courseDialog.showModal();
+    courseFiles.scrollTop = 0;
+  }
+  function renderCourseFiles(kind = "") {
+    const list = kind ? courseResources.filter(resource => resource.kind === kind) : courseResources;
+    courseFiles.replaceChildren();
+    if (!list.length) {
+      courseFiles.append(make("p",kind ? "当前没有符合条件的资料。" : "这门课暂未发布复习资料。","empty"));
+    }
     for (const resource of list) {
       const file = make("article",null,"file-card");
       const meta = make("p",null,"meta");
       if (resource.featured) {
-        const label = make("span",null,"featured-note");
-        const star = make("span","★");
-        star.setAttribute("aria-hidden","true");
-        label.append(star," 优秀");
-        meta.append(label," · ");
+        const star = make("span","★","featured-note");
+        star.setAttribute("role","img");
+        star.setAttribute("aria-label","已标记");
+        meta.append(star," · ");
       }
       meta.append(resource.kind);
       if (resource.credit) meta.append(" · 整理者 " + resource.credit);
@@ -187,9 +211,9 @@
         actions.append(download);
       }
       file.append(actions);
-      files.append(file);
+      courseFiles.append(file);
     }
-    $("course-dialog").showModal();
+    courseFiles.scrollTop = 0;
   }
   render();
   if (location.origin === "https://jcdl-notes.github.io") {
