@@ -151,19 +151,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/cpp/general/C++指针练习题.pdf"
     },
     {
-      "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
-      "title": "2021工程数学(3.5学分)(A)",
-      "course": "engineering-math",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-22",
-      "file": "files/2026-fall/engineering-math/featured/2021工程数学(3.5学分)(A).pdf"
-    },
-    {
       "id": "note-d194a05c-8b9e-421f-9aa3-81fc8601433b",
       "title": "复变函数的求导",
       "course": "engineering-math",
@@ -336,6 +323,19 @@ window.XINHUO_LIBRARY = {
       "topics": [],
       "updated": "2026-11-27",
       "file": "files/2026-fall/engineering-math/general/2022年工程数学(3.5学分)(A)(22.12.11)).pdf"
+    },
+    {
+      "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
+      "title": "2021工程数学(3.5学分)(A)",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/engineering-math/general/2021工程数学(3.5学分)(A).pdf"
     }
   ]
 };
