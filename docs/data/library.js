@@ -367,7 +367,10 @@ window.XINHUO_LIBRARY = {
       "id": "08bc7e33-8b97-4f17-8046-f8d29b4788b0",
       "note": "note-58de1121-1aef-488e-8423-6209f3059286",
       "title": "电路题库汇编",
-      "month": "2026-11"
+      "month": "2026-11",
+      "heading": "新增资料 · 电路",
+      "body": "电路题库汇编（含解答）",
+      "revision": "68525c12-3aae-4eb8-9bd8-cc47dbadfa54"
     }
   ]
 };
