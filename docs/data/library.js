@@ -88,7 +88,8 @@ window.XINHUO_LIBRARY = {
       "id": "electromagnetics",
       "term": "y3-fall",
       "name": "电磁场与电磁波",
-      "mark": "磁"
+      "mark": "磁",
+      "archived": true
     },
     {
       "id": "microprocessors",
