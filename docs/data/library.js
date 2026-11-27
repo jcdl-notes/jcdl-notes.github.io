@@ -364,13 +364,6 @@ window.XINHUO_LIBRARY = {
   },
   "announcements": [
     {
-      "id": "08ba5b28-c9a5-4635-a9eb-3e056813cd56",
-      "note": "note-58de1121-1aef-488e-8423-6209f3059286",
-      "title": "电路题库汇编（含解答）",
-      "month": "2026-11",
-      "previousTitle": "电路题库汇编"
-    },
-    {
       "id": "08bc7e33-8b97-4f17-8046-f8d29b4788b0",
       "note": "note-58de1121-1aef-488e-8423-6209f3059286",
       "title": "电路题库汇编",
