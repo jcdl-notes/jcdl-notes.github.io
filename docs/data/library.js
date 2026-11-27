@@ -306,22 +306,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记供参考.pdf"
     },
     {
-      "id": "note-5ce6ec0c-3a00-426d-958a-dcec96e8320b",
-      "title": "工程数学",
-      "kind": "完整笔记",
-      "credit": "张毅",
-      "topics": [],
-      "course": "engineering-math",
-      "edition": "2026-fall",
-      "featured": true,
-      "summary": "",
-      "updated": "2026-11-23",
-      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/engineering-math-b80f0763-e717-4ff5-a558-e1d227b925f8.pdf",
-      "filename": "工程数学.pdf",
-      "bytes": 81043765,
-      "assetId": 781464521
-    },
-    {
       "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
       "title": "半导体习题",
       "kind": "习题整理",
@@ -336,6 +320,22 @@ window.XINHUO_LIBRARY = {
       "filename": "半导体错题 1.pdf",
       "bytes": 162650916,
       "assetId": 770603680
+    },
+    {
+      "id": "note-5ce6ec0c-3a00-426d-958a-dcec96e8320b",
+      "title": "工程数学",
+      "kind": "完整笔记",
+      "credit": "张毅",
+      "topics": [],
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "featured": false,
+      "summary": "",
+      "updated": "2026-11-27",
+      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/engineering-math-b80f0763-e717-4ff5-a558-e1d227b925f8.pdf",
+      "filename": "工程数学.pdf",
+      "bytes": 81043765,
+      "assetId": 781464521
     }
   ]
 };
