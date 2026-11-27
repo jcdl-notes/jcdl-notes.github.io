@@ -194,21 +194,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/featured/半导体超级题库_20261119152723.pdf"
     },
     {
-      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
-      "title": "半导体判断题",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/semiconductor/featured/半导体技术基础【判断题】(2分).pdf"
-    },
-    {
       "id": "note-8e16d84a-4ae8-4261-8091-3a1c4a869fb7",
       "title": "半导体习题1",
       "course": "semiconductor",
@@ -336,6 +321,21 @@ window.XINHUO_LIBRARY = {
       ],
       "updated": "2026-11-27",
       "file": "files/2026-fall/semiconductor/general/《固态电子器件》重要基础英文术语.pdf"
+    },
+    {
+      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
+      "title": "半导体判断题",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/半导体技术基础【判断题】(2分).pdf"
     }
   ]
 };
