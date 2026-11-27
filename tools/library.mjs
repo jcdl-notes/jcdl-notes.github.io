@@ -43,6 +43,18 @@ export function noteDirectory(data, edition, course, bucket) {
 
 export const isoDate = date => new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai" }).format(date);
 
+export function recordAnnouncement(data, note, previousTitle) {
+  const entry = {
+    id: randomUUID(),
+    note: note.id,
+    title: note.title,
+    month: isoDate(new Date()).slice(0, 7),
+    ...(previousTitle ? {previousTitle} : {})
+  };
+  const announcements = Array.isArray(data.announcements) ? data.announcements : [];
+  return {...data, announcements:[entry, ...announcements]};
+}
+
 export function notePath(data, note) {
   const bucket = note.featured ? "featured" : "general";
   const name = note.file.split("/").at(-1);
@@ -58,7 +70,8 @@ export async function updateNote(data, old, next, pdf) {
   const target = next && catalog.fileURL(next.file)?.local ? notePath(data,next) : null;
   const resources = data.resources.filter(item => item.id !== old.id);
   if (next) resources.push(next);
-  const updatedData = {...data,resources};
+  let updatedData = {...data,resources};
+  if (next && next.title !== old.title) updatedData = recordAnnouncement(updatedData,next,old.title);
   if (target === source && !pdf) {
     await writeLibrary(updatedData);
     return updatedData;

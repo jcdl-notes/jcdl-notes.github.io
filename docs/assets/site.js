@@ -52,6 +52,7 @@
     const errors = catalog.validate(data);
     if (errors.length) throw new Error(errors.join("\n"));
     data = catalog.publicLibrary(data);
+    document.dispatchEvent(new CustomEvent("xinhuo:announcements", {detail:data}));
   } catch (error) {
     catalogStatus.textContent = "暂时无法加载资料，请刷新页面重试。";
     console.error(error.message);

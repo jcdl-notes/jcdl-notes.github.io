@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>芯火相传 · 资料管理端</title>
   <link rel="stylesheet" href="../assets/site.css">
-  <script defer src="../assets/catalog.js?v=large-pdfs"></script>
-  <script defer src="editor.js?v=download-stats"></script>
+  <script defer src="../assets/catalog.js?v=announcement-editor"></script>
+  <script defer src="editor.js?v=announcement-editor"></script>
 </head>
 <body>
 <header class="top"><div class="wrap top-row">
@@ -69,6 +69,28 @@
       <p id="course-operation-status" role="status"></p>
     </form>
   </section>
+  <details class="editor-box announcement-editor">
+    <summary>公告管理</summary>
+    <h3>通知</h3>
+    <form id="notice-management" class="editor-fields">
+      <label class="wide">通知标题<input name="title" maxlength="80" required></label>
+      <label class="wide">通知正文<textarea name="text" rows="6" maxlength="1600" required></textarea></label>
+      <div class="wide"><button class="action" type="submit">保存通知</button></div>
+      <p class="wide" id="notice-management-status" role="status"></p>
+    </form>
+    <h3>时间线</h3>
+    <form id="timeline-management" class="editor-fields">
+      <label class="wide">选择公告<select name="id"></select></label>
+      <label>公告月份<input type="month" name="month" required></label>
+      <label>公告标题<input name="title" maxlength="120" required></label>
+      <label class="wide">公告内容<textarea name="body" rows="3" maxlength="1600"></textarea></label>
+      <div class="wide entry-actions">
+        <button class="action" type="submit" id="timeline-save">添加公告</button>
+        <button class="action danger" type="button" id="timeline-delete" hidden>删除公告</button>
+      </div>
+      <p class="wide" id="timeline-management-status" role="status"></p>
+    </form>
+  </details>
   <section class="editor-box">
     <div class="admin-list-head"><h2>已收录资料</h2><span id="entry-count"></span></div>
     <div class="admin-filters">

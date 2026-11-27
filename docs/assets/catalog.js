@@ -2,6 +2,16 @@
 (() => {
   const prefix = "window.XINHUO_LIBRARY = ";
   const kinds = ["完整笔记", "专题笔记", "习题整理", "其他复习资料"];
+  const defaultNotice = {
+    title: "资料使用提示",
+    text: [
+      "本站资料由同学整理分享，仅供学习参考。请结合教材、课件和任课老师公布的考试范围，自行核对并判断。",
+      "带红星的资料建议先预览，再按自己的复习需要选择，确认内容合适后再下载。",
+      "祝同学们复习顺利，取得理想成绩！"
+    ].join("\n\n"),
+    revision: "1"
+  };
+  const validMonth = month => typeof month === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(month);
   const safeFilename = name => typeof name === "string"
     && name === name.trim() && name.length <= 150
     && /^[^<>:"/\\|?*\u0000-\u001f]+\.pdf$/iu.test(name)
@@ -59,11 +69,34 @@
     });
     return errors;
   }
+  function noticeSettings(data) {
+    const notice = data.notice;
+    return notice && typeof notice.title === "string" && notice.title.trim() &&
+      typeof notice.text === "string" && notice.text.trim() && typeof notice.revision === "string"
+      ? notice : defaultNotice;
+  }
+  function announcementText(data, entry) {
+    if (typeof entry.heading === "string") return {title:entry.heading, body:entry.body || ""};
+    const note = data.resources.find(item => item.id === entry.note);
+    const course = data.courses.find(item => item.id === note?.course);
+    const title = (entry.previousTitle ? "资料更名" : "新增资料") + (course ? " · " + course.name : "");
+    const body = entry.previousTitle ? "「" + entry.previousTitle + "」改为「" + entry.title + "」" : entry.title;
+    return {title,body};
+  }
+  const announcementRevision = entry => entry.revision || entry.id;
   function publicLibrary(data) {
     const courses = data.courses.filter(course => !course.archived);
-    if (courses.length === data.courses.length) return data;
     const visible = new Set(courses.map(course => course.id));
-    return {...data,courses,resources:data.resources.filter(note => visible.has(note.course))};
+    const resources = data.resources.filter(note => visible.has(note.course));
+    if (!Array.isArray(data.announcements)) return {...data,courses,resources};
+    const visibleNotes = new Set(resources.map(note => note.id));
+    const announcements = data.announcements.filter(entry => {
+      if (!entry || typeof entry.id !== "string" || !validMonth(entry.month)) return false;
+      if (entry.note !== undefined && !visibleNotes.has(entry.note)) return false;
+      if (typeof entry.heading === "string") return typeof entry.body === "string";
+      return typeof entry.title === "string" && (entry.previousTitle === undefined || typeof entry.previousTitle === "string");
+    });
+    return {...data,courses,resources,announcements};
   }
   function parse(source) {
     const normalized = source.trim();
@@ -71,5 +104,6 @@
     return JSON.parse(normalized.slice(prefix.length, -1));
   }
   function serialize(data) { return prefix + JSON.stringify(data, null, 2) + ";\n"; }
-  globalThis.XinhuoCatalog = {kinds, fileURL, safeFilename, validate, publicLibrary, parse, serialize};
+  globalThis.XinhuoCatalog = {kinds, fileURL, safeFilename, validate, publicLibrary, noticeSettings,
+    announcementText, announcementRevision, validMonth, parse, serialize};
 })();

@@ -9,6 +9,9 @@
   const deleteCourseButton = $("course-delete");
   const editor = $("edit-form");
   const dialog = $("edit-note");
+  const noticeForm = $("notice-management");
+  const timelineForm = $("timeline-management");
+  const timelinePicker = timelineForm.elements.namedItem("id");
   const catalog = window.XinhuoCatalog;
   const field = (owner,name) => owner.elements.namedItem(name);
   let data;
@@ -16,6 +19,8 @@
   let downloadCounts;
   let busy = false;
   let editing;
+  let noticeRevision;
+  let timelineSelection;
   function message(value, error = false) {
     $("edit-status").textContent = value;
     $("edit-status").classList.toggle("error", error);
@@ -97,6 +102,39 @@
     $("sync-status").textContent = repository ? "已连接正式站，保存后自动提交发布。" : "当前更新本机预览。连接 GitHub 后可自动发布。";
     drawEntries();
     drawCourseManagement();
+    drawAnnouncementManagement();
+  }
+  function timelineEntries() {
+    return Array.isArray(data?.announcements) ? data.announcements : [];
+  }
+  function selectedAnnouncement() {
+    return timelineEntries().find(entry => entry.id === timelinePicker.value);
+  }
+  function drawTimelineFields() {
+    const entry = selectedAnnouncement();
+    const selection = entry ? entry.id + "/" + catalog.announcementRevision(entry) : "";
+    if (selection === timelineSelection) return;
+    timelineSelection = selection;
+    const text = entry ? catalog.announcementText(data,entry) : {title:"",body:""};
+    const month = new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit"}).format(new Date());
+    field(timelineForm,"month").value = entry?.month || month;
+    field(timelineForm,"title").value = text.title;
+    field(timelineForm,"body").value = text.body;
+    $("timeline-save").textContent = entry ? "保存公告" : "添加公告";
+    $("timeline-delete").hidden = !entry;
+  }
+  function drawAnnouncementManagement() {
+    const notice = catalog.noticeSettings(data);
+    if (noticeRevision !== notice.revision) {
+      noticeRevision = notice.revision;
+      field(noticeForm,"title").value = notice.title;
+      field(noticeForm,"text").value = notice.text;
+    }
+    const rows = [...timelineEntries()].sort((a,b)=>b.month.localeCompare(a.month)).map(entry =>
+      [entry.id,entry.month+" · "+catalog.announcementText(data,entry).title]
+    );
+    options(timelinePicker,[["","新增公告"],...rows]);
+    drawTimelineFields();
   }
   function drawCourseManagement() {
     const course = data?.courses.find(item=>item.id === coursePicker.value);
@@ -261,6 +299,41 @@
   });
   visibilityButton.addEventListener("click",()=>changeCourse());
   deleteCourseButton.addEventListener("click",()=>changeCourse("delete"));
+  noticeForm.addEventListener("submit",event=>{
+    event.preventDefault();
+    if (!data) return;
+    const status = $("notice-management-status");
+    const values = {...Object.fromEntries(new FormData(noticeForm)),previousRevision:noticeRevision};
+    run(async()=>{
+      const state = await request("notice",JSON.stringify(values),"application/json");
+      status.textContent = "已保存通知。" + syncMessage(state);
+    },error=>{ status.textContent = error.message; });
+  });
+  timelinePicker.addEventListener("change",()=>{
+    $("timeline-management-status").textContent = "";
+    drawTimelineFields();
+  });
+  function changeAnnouncement(action) {
+    if (!data || busy) return;
+    const entry = selectedAnnouncement();
+    if (action === "delete" && (!entry || !confirm("删除「" + catalog.announcementText(data,entry).title + "」？"))) return;
+    const values = {...Object.fromEntries(new FormData(timelineForm)),action};
+    if (entry) values.previousRevision = catalog.announcementRevision(entry);
+    const status = $("timeline-management-status");
+    run(async()=>{
+      const state = await request("announcement",JSON.stringify(values),"application/json");
+      if (!entry) {
+        timelinePicker.value = timelineEntries()[0].id;
+        drawTimelineFields();
+      }
+      status.textContent = (action === "delete" ? "已删除公告。" : entry ? "已保存公告。" : "已添加公告。") + syncMessage(state);
+    },error=>{ status.textContent = error.message; });
+  }
+  timelineForm.addEventListener("submit",event=>{
+    event.preventDefault();
+    changeAnnouncement("save");
+  });
+  $("timeline-delete").addEventListener("click",()=>changeAnnouncement("delete"));
   $("retry").addEventListener("click",()=>run(async()=>{
     const state=await request("publish","", "text/plain");
     message(syncMessage(state),state === "failed");

@@ -5,7 +5,7 @@ import { resolve, extname, sep, join } from "node:path";
 import { createHash, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
-import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirectory, requirePDF, isoDate, updateNote, updateCourse } from "./library.mjs";
+import { catalog, docs, root, readLibrary, rebuildIndex, writeLibrary, noteDirectory, requirePDF, isoDate, updateNote, updateCourse, recordAnnouncement } from "./library.mjs";
 import { releaseStorage } from "./releases.mjs";
 
 import { credentialPath } from "./admin-settings.mjs";
@@ -151,10 +151,11 @@ async function upload(request, url, repository) {
       && item.featured === resource.featured && (item.filename || item.file.split("/").at(-1)).toLowerCase() === name.toLowerCase())) {
     throw new Error("这门课已收录同名文件，请选择其他文件。");
   }
+  const withNewNote = note => recordAnnouncement({...data,resources:[...data.resources,note]},note);
   return withPDF(request,repository,async pdf=>{
     if (pdf.large) {
       return saveRelease(repository,pdf,{...resource,filename:name},async saved=>{
-        const updated = {...data,resources:[...data.resources,saved]};
+        const updated = withNewNote(saved);
         await writeLibrary(updated);
         return updated;
       });
@@ -167,7 +168,7 @@ async function upload(request, url, repository) {
     try {
       try { await handle.writeFile(await readFile(pdf.path)); }
       finally { await handle.close(); }
-      return await rebuildIndex({...data,resources:[...data.resources,resource]});
+      return await rebuildIndex(withNewNote(resource));
     } catch (error) {
       await unlink(path).catch(cleanup=>console.error("清理未收录的 PDF 失败：",cleanup.code));
       throw error;
@@ -227,6 +228,52 @@ async function changeCourse(request) {
   return updateCourse(await readLibrary(),id,action,clean(name,80),previousName);
 }
 
+async function saveNotice(request) {
+  const values = JSON.parse((await bodyBytes(request,8192)).toString("utf8")) ?? {};
+  const title = clean(values.title,80);
+  const text = clean(values.text,1600);
+  if (!title || !text) throw new Error("请填写通知标题和正文。");
+  const data = await readLibrary();
+  const current = catalog.noticeSettings(data);
+  if (title === current.title && text === current.text) return data;
+  if (values.previousRevision !== current.revision) throw new Error("通知已在其他页面修改，请刷新后重试。");
+  const updated = {...data,notice:{title,text,revision:randomUUID()}};
+  await writeLibrary(updated);
+  return updated;
+}
+
+async function changeAnnouncement(request) {
+  const values = JSON.parse((await bodyBytes(request,8192)).toString("utf8")) ?? {};
+  if (!["save","delete"].includes(values.action) || typeof values.id !== "string") throw new Error("无效的公告操作。");
+  const data = await readLibrary();
+  const entries = Array.isArray(data.announcements) ? data.announcements : [];
+  const current = entries.find(entry => entry.id === values.id);
+  if (values.id && (!current || values.previousRevision !== catalog.announcementRevision(current))) {
+    throw new Error("公告已变更或删除，请刷新后重试。");
+  }
+  let announcements;
+  if (values.action === "delete") {
+    if (!current) throw new Error("请选择要删除的公告。");
+    announcements = entries.filter(entry => entry.id !== current.id);
+  } else {
+    const heading = clean(values.title,120);
+    const body = clean(values.body,1600);
+    const month = values.month;
+    if (!heading || !catalog.validMonth(month)) throw new Error("请填写标题并选择正确的年月。");
+    if (current) {
+      const text = catalog.announcementText(data,current);
+      if (heading === text.title && body === text.body && month === current.month) return data;
+      const changed = {...current,heading,body,month,revision:randomUUID()};
+      announcements = entries.map(entry => entry.id === current.id ? changed : entry);
+    } else {
+      announcements = [{id:randomUUID(),heading,body,month},...entries];
+    }
+  }
+  const updated = {...data,announcements};
+  await writeLibrary(updated);
+  return updated;
+}
+
 function json(response, code, data) {
   response.writeHead(code, {"Content-Type":"application/json; charset=utf-8"}).end(JSON.stringify(data));
 }
@@ -282,7 +329,8 @@ const server = createServer(async (request,response) => {
     }
     if (request.method === "GET") return await staticFile(response,pathname);
     const action = pathname.slice("/admin/api/".length);
-    const actions = {upload, category:addCategory, course:changeCourse, edit:editOrDelete, delete:editOrDelete, publish:readLibrary};
+    const actions = {upload, category:addCategory, course:changeCourse, edit:editOrDelete, delete:editOrDelete,
+      notice:saveNotice, announcement:changeAnnouncement, publish:readLibrary};
     if (request.method !== "POST" || !pathname.startsWith("/admin/api/") || !Object.hasOwn(actions,action)) return response.writeHead(404).end();
     if (request.headers.origin !== origin || request.headers["x-xinhuo-editor"] !== "1") return response.writeHead(403).end();
     if (busy) return json(response,409,{message:"有一项更新正在处理，请稍后重试。"});

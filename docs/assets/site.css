@@ -653,6 +653,16 @@ dialog::backdrop {
   grid-column: 1/-1
 }
 
+.announcement-editor summary {
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.announcement-editor .wide {
+  grid-column: 1/-1;
+}
+
 .editor input:not([type=checkbox]),.editor select,.editor textarea {
   width: 100%;
   padding: 7px;

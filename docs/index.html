@@ -6,15 +6,23 @@
   <meta name="description" content="集成电路学院芯火相传学习笔记资料库，按课程查找、预览和下载复习资料。">
   <title>芯火相传 · 学习笔记资料库</title>
   <link rel="icon" href="assets/college-logo.jpg">
-  <link rel="stylesheet" href="assets/site.css?v=course-filters">
-  <script defer src="assets/catalog.js?v=course-visibility"></script>
-  <script defer src="assets/site.js?v=course-filters"></script>
+  <link rel="stylesheet" href="assets/site.css?v=announcements">
+  <link rel="stylesheet" href="assets/notice.css">
+  <script defer src="assets/catalog.js?v=announcement-editor"></script>
+  <script defer src="assets/notice.js?v=announcement-editor"></script>
+  <script defer src="assets/site.js?v=announcements"></script>
 </head>
 <body>
   <a class="skip" href="#library">跳到课程资料</a>
   <header class="top"><div class="wrap top-row">
     <a class="brand" href="./index.html"><img class="college-logo" src="assets/college-logo.jpg" width="42" height="42" alt="学院院徽"><span>芯火相传<small>集成电路学院</small></span></a>
-    <nav aria-label="站点导航"><a class="nav-current" href="#library">课程资料</a></nav>
+    <nav aria-label="站点导航">
+      <a class="nav-current" href="#library">课程资料</a>
+      <button class="announcement-trigger" id="announcement-open" type="button" aria-label="公告" aria-haspopup="dialog" title="公告" hidden>
+        <svg class="announcement-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 4.4-1 6.7-2.6 8.2a1 1 0 0 0 .7 1.8h15.8a1 1 0 0 0 .7-1.8C19 14.7 18 12.4 18 8Z"/><path d="M10 20.8a2.2 2.2 0 0 0 4 0"/></svg>
+        <span class="announcement-dot" id="announcement-dot" aria-hidden="true" hidden></span>
+      </button>
+    </nav>
   </div></header>
   <main class="wrap">
     <section class="hero" aria-labelledby="page-title">
@@ -48,6 +56,39 @@
     </section>
   </main>
   <footer class="footer"><div class="wrap"><span>芯火相传 · 笔记助学</span><span>集成电路学院（微电子学院）</span></div></footer>
+  <dialog class="notice-dialog" id="usage-notice" aria-labelledby="notice-title" aria-describedby="notice-copy">
+    <form method="dialog" class="notice-content">
+      <div class="notice-icon" aria-hidden="true">i</div>
+      <h2 id="notice-title" tabindex="-1" autofocus>资料使用提示</h2>
+      <div class="notice-copy" id="notice-copy"></div>
+      <label class="notice-checkbox"><input type="checkbox" id="notice-dismiss-permanently">不再提示</label>
+      <button class="notice-confirm" type="submit">知道了</button>
+    </form>
+  </dialog>
+  <dialog class="announcement-dialog" id="announcement-dialog" aria-labelledby="announcement-title">
+    <div class="announcement-header">
+      <h2 id="announcement-title" tabindex="-1" autofocus>公告</h2>
+      <div class="announcement-tabs" role="group" aria-label="公告栏目">
+        <button type="button" id="announcement-notice-tab" aria-controls="announcement-notice-panel" aria-pressed="true">
+          <svg class="announcement-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 4.4-1 6.7-2.6 8.2a1 1 0 0 0 .7 1.8h15.8a1 1 0 0 0 .7-1.8C19 14.7 18 12.4 18 8Z"/><path d="M10 20.8a2.2 2.2 0 0 0 4 0"/></svg> 通知
+          <span class="announcement-dot" id="announcement-notice-dot" aria-hidden="true" hidden></span>
+        </button>
+        <button type="button" id="announcement-timeline-tab" aria-controls="announcement-timeline-panel" aria-pressed="false">
+          <span class="announcement-history" aria-hidden="true"></span> 时间线
+          <span class="announcement-dot" id="announcement-timeline-dot" aria-hidden="true" hidden></span>
+        </button>
+      </div>
+    </div>
+    <section class="announcement-panel" id="announcement-notice-panel" aria-label="通知">
+      <h3 id="announcement-notice-heading">资料使用提示</h3>
+      <div class="notice-copy" id="announcement-notice-copy"></div>
+    </section>
+    <section class="announcement-panel" id="announcement-timeline-panel" aria-label="时间线" tabindex="0" hidden>
+      <p id="announcement-placeholder" class="empty">暂无资料更新。</p>
+      <ol class="announcement-timeline" id="announcement-entries"></ol>
+    </section>
+    <form class="announcement-footer" method="dialog"><button type="submit" class="announcement-close">关闭</button></form>
+  </dialog>
   <dialog id="course-dialog" class="course-dialog" aria-labelledby="course-title">
     <div class="course-dialog-header">
       <form method="dialog"><button class="close" aria-label="关闭课程资料">×</button></form>
