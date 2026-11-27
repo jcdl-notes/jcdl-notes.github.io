@@ -192,19 +192,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/复变函数的求导.pdf"
     },
     {
-      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
-      "title": "工程数学18-24年试卷及答案",
-      "course": "engineering-math",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/engineering-math/featured/王帅工程数学3.5历年试卷及答案.pdf"
-    },
-    {
       "id": "note-bd3b651a-4e76-4b81-8961-a925afe49108",
       "title": "积分变换练习",
       "course": "engineering-math",
@@ -336,6 +323,19 @@ window.XINHUO_LIBRARY = {
       "filename": "工程数学.pdf",
       "bytes": 81043765,
       "assetId": 781464521
+    },
+    {
+      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
+      "title": "工程数学18-24年试卷及答案",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/engineering-math/general/王帅工程数学3.5历年试卷及答案.pdf"
     }
   ]
 };
