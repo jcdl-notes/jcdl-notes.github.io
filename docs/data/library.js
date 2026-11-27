@@ -81,7 +81,8 @@ window.XINHUO_LIBRARY = {
       "id": "dsp",
       "term": "y3-fall",
       "name": "数字信号处理",
-      "mark": "信"
+      "mark": "信",
+      "archived": true
     },
     {
       "id": "electromagnetics",
