@@ -129,6 +129,21 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/circuits/featured/电路历年题.pdf"
     },
     {
+      "id": "note-58de1121-1aef-488e-8423-6209f3059286",
+      "title": "电路题库汇编",
+      "course": "circuits",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "熊付林",
+      "summary": "",
+      "topics": [
+        "习题解答"
+      ],
+      "updated": "2026-11-28",
+      "file": "files/2026-fall/circuits/featured/电路题库汇编.pdf"
+    },
+    {
       "id": "note-2434a115-dfc9-49c0-bcb5-91799f4d3c3b",
       "title": "C＋＋赛",
       "course": "cpp",
@@ -170,6 +185,32 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/featured/复变函数的求导.pdf"
     },
     {
+      "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
+      "title": "2021工程数学(3.5学分)(A)",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/engineering-math/general/2021工程数学(3.5学分)(A).pdf"
+    },
+    {
+      "id": "note-6479f15f-c142-40e5-9698-b97e170abc0c",
+      "title": "2022年工程数学(3.5学分)(A)(22.12.11))",
+      "course": "engineering-math",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/engineering-math/general/2022年工程数学(3.5学分)(A)(22.12.11)).pdf"
+    },
+    {
       "id": "note-bd3b651a-4e76-4b81-8961-a925afe49108",
       "title": "积分变换练习",
       "course": "engineering-math",
@@ -183,20 +224,105 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/engineering-math/general/积分变换练习.pdf"
     },
     {
-      "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
-      "title": "半导体习题",
+      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
+      "title": "工程数学18-24年试卷及答案",
+      "course": "engineering-math",
+      "edition": "2026-fall",
       "kind": "习题整理",
-      "credit": "沈明慧",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
       "topics": [],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/engineering-math/general/王帅工程数学3.5历年试卷及答案.pdf"
+    },
+    {
+      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
+      "title": "半导体技术基础重要英文术语",
       "course": "semiconductor",
       "edition": "2026-fall",
+      "kind": "习题整理",
       "featured": false,
+      "credit": "王帅",
       "summary": "",
-      "updated": "2026-11-22",
-      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/semiconductor-c60d7007-f053-443c-8c78-2f5300b2c317.pdf",
-      "filename": "半导体错题 1.pdf",
-      "bytes": 162650916,
-      "assetId": 770603680
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/《固态电子器件》重要基础英文术语.pdf"
+    },
+    {
+      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
+      "title": "半导体习题2",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/半导体超级题库_20261119152723.pdf"
+    },
+    {
+      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
+      "title": "半导体判断题",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/半导体技术基础【判断题】(2分).pdf"
+    },
+    {
+      "id": "note-c9c52ed1-66e8-4b50-beee-aa8372a71bc2",
+      "title": "半导体技术基础笔记仅供参考",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "完整笔记",
+      "featured": false,
+      "credit": "",
+      "summary": "",
+      "topics": [],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记供参考.pdf"
+    },
+    {
+      "id": "note-8e16d84a-4ae8-4261-8091-3a1c4a869fb7",
+      "title": "半导体习题1",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "王帅",
+      "summary": "",
+      "topics": [
+        "习题"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/半导体题目.pdf"
+    },
+    {
+      "id": "note-50b66639-e374-4a7f-9895-8dcf00501af3",
+      "title": "24级部分真题回忆",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "",
+      "summary": "",
+      "topics": [
+        "部分真题回忆"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/考前必看.pdf"
     },
     {
       "id": "note-5ce6ec0c-3a00-426d-958a-dcec96e8320b",
@@ -215,136 +341,33 @@ window.XINHUO_LIBRARY = {
       "assetId": 781464521
     },
     {
-      "id": "note-10725fec-200b-44d3-8a1d-d41836e608e1",
-      "title": "工程数学18-24年试卷及答案",
-      "course": "engineering-math",
-      "edition": "2026-fall",
+      "id": "note-f3334dd5-f34e-453e-9101-7bdd54055dd0",
+      "title": "半导体习题",
       "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
+      "credit": "沈明慧",
       "topics": [],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/engineering-math/general/王帅工程数学3.5历年试卷及答案.pdf"
-    },
-    {
-      "id": "note-6479f15f-c142-40e5-9698-b97e170abc0c",
-      "title": "2022年工程数学(3.5学分)(A)(22.12.11))",
-      "course": "engineering-math",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/engineering-math/general/2022年工程数学(3.5学分)(A)(22.12.11)).pdf"
-    },
-    {
-      "id": "note-bc2ed3d0-c28e-4cda-b507-c55e02009a5e",
-      "title": "2021工程数学(3.5学分)(A)",
-      "course": "engineering-math",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/engineering-math/general/2021工程数学(3.5学分)(A).pdf"
-    },
-    {
-      "id": "note-50b66639-e374-4a7f-9895-8dcf00501af3",
-      "title": "24级部分真题回忆",
       "course": "semiconductor",
       "edition": "2026-fall",
-      "kind": "习题整理",
       "featured": false,
-      "credit": "",
       "summary": "",
-      "topics": [
-        "部分真题回忆"
-      ],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/semiconductor/general/考前必看.pdf"
-    },
-    {
-      "id": "note-3bb9f045-9633-464a-a78d-4c03138fc787",
-      "title": "半导体技术基础重要英文术语",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/semiconductor/general/《固态电子器件》重要基础英文术语.pdf"
-    },
-    {
-      "id": "note-d4490aa6-736e-44a7-94b4-3be58f822379",
-      "title": "半导体判断题",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/semiconductor/general/半导体技术基础【判断题】(2分).pdf"
-    },
-    {
-      "id": "note-8e16d84a-4ae8-4261-8091-3a1c4a869fb7",
-      "title": "半导体习题1",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/semiconductor/general/半导体题目.pdf"
-    },
-    {
-      "id": "note-83085f4c-c562-4ffe-b0b5-56fb7f765267",
-      "title": "半导体习题2",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": false,
-      "credit": "王帅",
-      "summary": "",
-      "topics": [
-        "习题"
-      ],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/semiconductor/general/半导体超级题库_20261119152723.pdf"
-    },
-    {
-      "id": "note-c9c52ed1-66e8-4b50-beee-aa8372a71bc2",
-      "title": "半导体技术基础笔记仅供参考",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "完整笔记",
-      "featured": false,
-      "credit": "",
-      "summary": "",
-      "topics": [],
-      "updated": "2026-11-27",
-      "file": "files/2026-fall/semiconductor/general/半导体技术基础笔记供参考.pdf"
+      "updated": "2026-11-22",
+      "file": "https://github.com/jcdl-notes/jcdl-notes.github.io/releases/download/course-pdfs/semiconductor-c60d7007-f053-443c-8c78-2f5300b2c317.pdf",
+      "filename": "半导体错题 1.pdf",
+      "bytes": 162650916,
+      "assetId": 770603680
     }
   ],
   "notice": {
     "title": "资料使用提示",
     "text": "本站资料由同学整理分享，仅供学习参考。请结合教材、课件和任课老师公布的考试范围，自行核对并判断。\n\n带红星的资料建议先预览，再按自己的复习需要选择，确认内容合适后再下载。\n\n右上角公告内的时间线可查看资料更新情况。\n\n祝同学们复习顺利，取得理想成绩！",
     "revision": "d5f551ce-fbf1-465f-8c2a-a52619ea9101"
-  }
+  },
+  "announcements": [
+    {
+      "id": "08bc7e33-8b97-4f17-8046-f8d29b4788b0",
+      "note": "note-58de1121-1aef-488e-8423-6209f3059286",
+      "title": "电路题库汇编",
+      "month": "2026-11"
+    }
+  ]
 };
