@@ -129,21 +129,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/circuits/featured/电路历年题.pdf"
     },
     {
-      "id": "note-58de1121-1aef-488e-8423-6209f3059286",
-      "title": "电路题库汇编",
-      "course": "circuits",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "熊付林",
-      "summary": "",
-      "topics": [
-        "习题解答"
-      ],
-      "updated": "2026-11-28",
-      "file": "files/2026-fall/circuits/featured/电路题库汇编.pdf"
-    },
-    {
       "id": "note-2434a115-dfc9-49c0-bcb5-91799f4d3c3b",
       "title": "C＋＋赛",
       "course": "cpp",
@@ -355,6 +340,21 @@ window.XINHUO_LIBRARY = {
       "filename": "半导体错题 1.pdf",
       "bytes": 162650916,
       "assetId": 770603680
+    },
+    {
+      "id": "note-58de1121-1aef-488e-8423-6209f3059286",
+      "title": "电路题库汇编（含解答）",
+      "course": "circuits",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": true,
+      "credit": "熊付林",
+      "summary": "",
+      "topics": [
+        "习题解答"
+      ],
+      "updated": "2026-11-28",
+      "file": "files/2026-fall/circuits/featured/电路题库汇编.pdf"
     }
   ],
   "notice": {
@@ -363,6 +363,13 @@ window.XINHUO_LIBRARY = {
     "revision": "d5f551ce-fbf1-465f-8c2a-a52619ea9101"
   },
   "announcements": [
+    {
+      "id": "08ba5b28-c9a5-4635-a9eb-3e056813cd56",
+      "note": "note-58de1121-1aef-488e-8423-6209f3059286",
+      "title": "电路题库汇编（含解答）",
+      "month": "2026-11",
+      "previousTitle": "电路题库汇编"
+    },
     {
       "id": "08bc7e33-8b97-4f17-8046-f8d29b4788b0",
       "note": "note-58de1121-1aef-488e-8423-6209f3059286",
