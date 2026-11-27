@@ -239,21 +239,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/semiconductor/featured/半导体题目.pdf"
     },
     {
-      "id": "note-50b66639-e374-4a7f-9895-8dcf00501af3",
-      "title": "考前必看",
-      "course": "semiconductor",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "",
-      "summary": "",
-      "topics": [
-        "部分真题回忆"
-      ],
-      "updated": "2026-11-24",
-      "file": "files/2026-fall/semiconductor/featured/考前必看.pdf"
-    },
-    {
       "id": "note-c9c52ed1-66e8-4b50-beee-aa8372a71bc2",
       "title": "半导体技术基础笔记供参考",
       "course": "semiconductor",
@@ -336,6 +321,21 @@ window.XINHUO_LIBRARY = {
       "topics": [],
       "updated": "2026-11-27",
       "file": "files/2026-fall/engineering-math/general/2021工程数学(3.5学分)(A).pdf"
+    },
+    {
+      "id": "note-50b66639-e374-4a7f-9895-8dcf00501af3",
+      "title": "24级部分真题回忆",
+      "course": "semiconductor",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "",
+      "summary": "",
+      "topics": [
+        "部分真题回忆"
+      ],
+      "updated": "2026-11-27",
+      "file": "files/2026-fall/semiconductor/general/考前必看.pdf"
     }
   ]
 };
