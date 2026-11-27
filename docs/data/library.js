@@ -74,7 +74,8 @@ window.XINHUO_LIBRARY = {
       "id": "communications",
       "term": "y3-fall",
       "name": "通信原理",
-      "mark": "通"
+      "mark": "通",
+      "archived": true
     },
     {
       "id": "dsp",
