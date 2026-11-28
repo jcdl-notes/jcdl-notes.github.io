@@ -114,21 +114,6 @@ window.XINHUO_LIBRARY = {
       "file": "files/2026-fall/circuits/featured/《电路》必会大题.pdf"
     },
     {
-      "id": "note-20a7acbe-d4f1-45f0-9fd4-f0d899b257bf",
-      "title": "电路23.24.25年题",
-      "course": "circuits",
-      "edition": "2026-fall",
-      "kind": "习题整理",
-      "featured": true,
-      "credit": "",
-      "summary": "",
-      "topics": [
-        "23.24.25年期末题"
-      ],
-      "updated": "2026-11-23",
-      "file": "files/2026-fall/circuits/featured/电路历年题.pdf"
-    },
-    {
       "id": "note-2434a115-dfc9-49c0-bcb5-91799f4d3c3b",
       "title": "C＋＋赛",
       "course": "cpp",
@@ -355,6 +340,21 @@ window.XINHUO_LIBRARY = {
       ],
       "updated": "2026-11-28",
       "file": "files/2026-fall/circuits/featured/电路题库汇编.pdf"
+    },
+    {
+      "id": "note-20a7acbe-d4f1-45f0-9fd4-f0d899b257bf",
+      "title": "电路23.24.25年题",
+      "course": "circuits",
+      "edition": "2026-fall",
+      "kind": "习题整理",
+      "featured": false,
+      "credit": "",
+      "summary": "",
+      "topics": [
+        "23.24.25年期末题"
+      ],
+      "updated": "2026-11-28",
+      "file": "files/2026-fall/circuits/general/电路历年题.pdf"
     }
   ],
   "notice": {
